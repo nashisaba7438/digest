@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0054)file:///C:/Users/cge21/Downloads/digest_42.html#detail -->
+<!-- saved from url=(0054)file:///C:/Users/cge21/Downloads/digest_56.html#detail -->
 <html lang="ja"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -74,7 +74,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .imp-dot{width:5px;height:5px;border-radius:50%;background:var(--border2);}
 .imp-dot.on{background:var(--accent);}
 .article-title{font-size:0.9rem;font-weight:700;line-height:1.55;margin-bottom:7px;color:var(--text);transition:color 0.2s;word-break:break-word;overflow-wrap:break-word;}
-.article-summary{font-size:0.78rem;line-height:1.75;color:#6868a0;word-break:break-word;overflow-wrap:break-word;}
+.article-summary{font-size:0.78rem;line-height:1.8;color:#8080b0;word-break:break-word;overflow-wrap:break-word;margin-top:2px;}
 .article-actions{display:flex;flex-direction:column;align-items:stretch;gap:6px;padding:12px 14px;border-left:1px solid var(--border);min-width:80px;justify-content:center;flex-shrink:0;}
 .btn-ai-summary{display:flex;align-items:center;gap:7px;background:var(--accent-dim);border:1px solid rgba(0,232,122,0.3);color:var(--accent);padding:9px 18px;font-family:'Noto Sans JP',sans-serif;font-size:0.82rem;font-weight:700;cursor:pointer;border-radius:6px;transition:all 0.2s;flex:1;}
 .btn-ai-summary:hover{background:rgba(0,232,122,0.2);border-color:var(--accent);box-shadow:0 0 12px rgba(0,232,122,0.15);}
@@ -133,11 +133,15 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .detail-intro-row{display:flex;align-items:baseline;gap:12px;}
 .detail-intro-label{font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:600;letter-spacing:0.1em;color:var(--muted);flex-shrink:0;width:48px;}
 .detail-intro-val{font-size:0.88rem;line-height:1.6;color:var(--text);}
-.detail-content{font-size:0.92rem;line-height:2;color:#b8b8d8;}.detail-content p{margin-bottom:1.6em;}.detail-content p+p{margin-top:0;}
-.detail-content p{margin-bottom:1.3em;}
+.detail-content{font-size:0.93rem;line-height:2.0;color:#c0c0e0;}.detail-content p{margin:0 0 2em 0;}.detail-content p:last-child{margin-bottom:0;}.detail-content br{display:block;margin-bottom:0.3em;}.detail-hero{width:100%;max-height:320px;object-fit:cover;border-radius:8px;margin-bottom:22px;display:block;}.detail-hero-wrap{width:100%;margin-bottom:22px;background:var(--card);border-radius:8px;overflow:hidden;border:1px solid var(--border);}
 .detail-footer{margin-top:32px;padding-top:20px;border-top:1px solid var(--border);}
 .btn-source-lg{display:inline-flex;align-items:center;gap:7px;background:transparent;border:1px solid var(--blue);color:var(--blue);padding:10px 22px;font-family:'JetBrains Mono',monospace;font-size:0.75rem;font-weight:600;letter-spacing:0.08em;cursor:pointer;border-radius:5px;transition:all 0.2s;text-decoration:none;text-transform:uppercase;}
 .btn-source-lg:hover{background:rgba(61,142,255,0.1);}
+.detail-footer{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:32px;}
+.btn-detail-pref{background:transparent;border:1px solid var(--border);color:var(--muted);padding:10px 20px;font-family:'Noto Sans JP',sans-serif;font-size:0.82rem;cursor:pointer;border-radius:5px;transition:all 0.2s;}
+.btn-detail-pref:hover{border-color:var(--border2);color:var(--text);}
+.btn-detail-like.active{border-color:var(--accent);color:var(--accent);background:var(--accent-dim);}
+.btn-detail-dislike.active{border-color:var(--red);color:var(--red);background:rgba(255,80,80,0.08);}
 
 /* EMPTY/LOADING/ERROR */
 .empty-state{text-align:center;padding:60px 20px;border:1px dashed var(--border);border-radius:8px;}
@@ -170,10 +174,22 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .api-guide-title{font-family:'JetBrains Mono',monospace;font-size:0.62rem;font-weight:600;letter-spacing:0.15em;color:var(--muted);text-transform:uppercase;margin-bottom:12px;}
 .api-steps{display:flex;flex-direction:column;gap:8px;}
 .api-step{display:flex;align-items:flex-start;gap:10px;}
-.api-step-num{width:20px;height:20px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(0,232,122,0.3);color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:0.6rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.api-step-text{font-size:0.78rem;line-height:1.6;color:#9090b8;}
+.api-step-num{width:22px;height:22px;border-radius:50%;background:var(--accent-dim);border:1px solid rgba(0,232,122,0.3);color:var(--accent);font-family:'JetBrains Mono',monospace;font-size:0.65rem;font-weight:600;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;}
+.api-step-text{font-size:0.8rem;line-height:1.7;color:#9090b8;}
 .api-step-text a{color:var(--accent);text-decoration:none;}
 .api-step-text strong{color:var(--text);}
+.api-warn{margin-top:12px;padding:10px 12px;background:rgba(255,160,50,0.08);border:1px solid rgba(255,160,50,0.25);border-radius:6px;font-size:0.78rem;line-height:1.6;color:#c8a060;}
+.api-warn strong{color:#e8c080;}
+.settings-tabs{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border);}
+.settings-tab{flex:1;padding:8px 12px;background:none;border:none;border-bottom:2px solid transparent;color:#6060a0;font-size:0.82rem;cursor:pointer;transition:all 0.15s;margin-bottom:-1px;}
+.settings-tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.settings-tab:hover{color:var(--text);}
+.billing-explain{font-size:0.82rem;line-height:1.7;color:#9090b8;margin-bottom:12px;padding:10px 12px;background:rgba(0,232,122,0.05);border:1px solid rgba(0,232,122,0.15);border-radius:6px;}
+.billing-explain strong{color:var(--accent);}
+.billing-faq{margin-top:14px;display:flex;flex-direction:column;gap:6px;}
+.billing-faq-q{font-size:0.8rem;font-weight:600;color:#a0d8b0;}
+.billing-faq-a{font-size:0.78rem;color:#7070a0;line-height:1.6;margin-bottom:4px;}
+.billing-faq-a strong{color:#c0e0c8;}
 .rss-list{display:flex;flex-direction:column;gap:8px;margin-bottom:14px;}
 .rss-item{display:flex;align-items:center;gap:8px;background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:8px 10px;}
 .btn-rss-del{background:transparent;border:none;color:var(--muted);cursor:pointer;padding:2px 6px;font-size:0.85rem;border-radius:3px;transition:color 0.2s;flex-shrink:0;}
@@ -235,10 +251,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 }
 </style>
 </head>
-<body style="overflow: hidden;">
+<body style="">
 <header class="header">
   <div class="logo">DIGEST</div>
-  <div class="header-clock" id="clock">17:23:45</div>
+  <div class="header-clock" id="clock">18:21:35</div>
   <div class="header-slots">
     <div class="slot" id="slot-0600"><div class="slot-dot"></div>06:00</div>
     <div class="slot" id="slot-1200"><div class="slot-dot"></div>12:00</div>
@@ -250,41 +266,109 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <button class="btn-icon" onclick="openSettings()">⚙ 設定</button>
   </div>
 </header>
-<div class="tabs" id="tabs"><button class="tab tab-digest" data-cat="__digest__" onclick="switchTab(this)">⚡ ダイジェスト</button><button class="tab active" data-cat="game_4gamer" onclick="switchTab(this)">🎮 ゲーム 4Gamer</button><button class="tab" data-cat="game_gamewatch" onclick="switchTab(this)">🕹 ゲーム GameWatch</button><button class="tab" data-cat="anime_gamewatch" onclick="switchTab(this)">📺 アニメ</button><button class="tab" data-cat="ai" onclick="switchTab(this)">🤖 AI最新情報</button><button class="tab" data-cat="geopolitics" onclick="switchTab(this)">🌍 地政学</button><button class="tab" data-cat="finance" onclick="switchTab(this)">💹 金融情報</button><button class="tab tab-add" onclick="openAddCat()">＋</button></div>
-<div class="main" id="mainContent"><div class="section" id="sec-__digest__"><div class="section-header"><div class="section-title">⚡ 今日のダイジェスト</div><div class="section-meta"><div class="last-updated" id="upd-__digest__"></div><button class="btn-fetch" id="btn-__digest__" onclick="buildDigest()">生成</button></div></div><div id="art-__digest__"><div class="empty-state"><div class="empty-icon">⚡</div><div class="empty-title">ダイジェスト未生成</div><div class="empty-sub">全カテゴリ取得後に「生成」を押してください</div></div></div></div><div class="section active" id="sec-game_4gamer"><div class="section-header"><div class="section-title">🎮 ゲーム 4Gamer</div><div class="section-meta"><div class="last-updated" id="upd-game_4gamer">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;game_4gamer&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-game_4gamer" onclick="fetchOne(&#39;game_4gamer&#39;)">取得</button></div></div><div id="art-game_4gamer"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">日本ファルコム創立45周年記念「ドラゴンスレイヤー・プロジェクト」が始動。コンシューマ向けの新プロジェクト</div><div class="article-summary">ファルコム45周年、新プロジェクト始動</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/988/G098873/20260306077/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-0" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-0" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">「空の軌跡 the 2nd」のメインキャラクターとキャスト情報が明らかに。公式サイトが正式にオープンし，ティザートレイラーが公開</div><div class="article-summary">空の軌跡 the 2nd、キャラ・キャスト公開</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/969/G096988/20260306079/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-1" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-1" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">サイコスリラー「家へ帰れ、アニー」，PS5/Xbox Series X|S版を3月31日に発売。SCP財団の下級職員が組織の隠された秘密を解き明かす</div><div class="article-summary">サイコスリラー「家へ帰れ、アニー」発売</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/988/G098896/20260309031/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-2" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-2" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">トランプのカードに閉じ込められた少女と話しながらフリーセル。カード型ADV「種も仕掛けも思い出も」，Steamストアページを公開</div><div class="article-summary">カード型ADV「種も仕掛けも思い出も」</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/988/G098893/20260309028/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-3" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-3" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">「紙岡聖子（仮）に関する考察」を手がけたSIM3の新作「カレキニハナヲ」が公開中。Webサイトを調査する全編無料のミステリーゲーム</div><div class="article-summary">SIM3新作ミステリー「カレキニハナヲ」</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/988/G098887/20260309020/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-4" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-4" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-game_gamewatch"><div class="section-header"><div class="section-title">🕹 ゲーム GameWatch</div><div class="section-meta"><div class="last-updated" id="upd-game_gamewatch">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;game_gamewatch&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-game_gamewatch" onclick="fetchOne(&#39;game_gamewatch&#39;)">取得</button></div></div><div id="art-game_gamewatch"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">【ポケモン】「ポケパーク カントー」ショッピングバッグの販売中止と交換対応を発表。色落ちする可能性が判明</div><div class="article-summary">ポケモンショッピングバッグに色落ちの可能性、販売中止と交換対応を発表。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/news/2091745.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-0" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-0" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">USJ「セサミストリート ・ファン・ワールド」が5月10日をもって終了。特別イベントを3月20日から開催</div><div class="article-summary">USJセサミストリート・ファン・ワールドが5月10日終了、特別イベント開催。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/news/2091726.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-1" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-1" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">ローソン「ホロライブ」コラボが3月17日より開催！ オリジナルグッズの販売も</div><div class="article-summary">ローソンとホロライブが3月17日よりコラボ、オリジナルグッズ販売。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/news/2091672.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-2" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-2" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">「フォートナイト」、星街すいせいさんとのコラボ予告を公開すいちゃんが「フォトナ」にやってくる</div><div class="article-summary">フォートナイトと星街すいせいさんのコラボ予告公開、すいちゃんが参戦。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/news/2091664.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-3" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-3" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">「パラノマサイト 伊勢人魚物語」に出てくるあの場所を激写！ 物語の舞台・三重に聖地巡礼写真満載で現地の空気感をお届け！</div><div class="article-summary">「パラノマサイト」聖地巡礼レポート、三重の舞台を写真で紹介。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/kikaku/2091516.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-4" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-4" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-anime_gamewatch"><div class="section-header"><div class="section-title">📺 アニメ</div><div class="section-meta"><div class="last-updated" id="upd-anime_gamewatch">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;anime_gamewatch&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-anime_gamewatch" onclick="fetchOne(&#39;anime_gamewatch&#39;)">取得</button></div></div><div id="art-anime_gamewatch"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">高額132万円でも「予定数終了」攻殻機動隊の“等身大”草薙素子フィギュア、要望受け追加受注</div><div class="article-summary">攻殻機動隊の等身大フィギュアが完売、追加受注へ</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175190" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-0" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-0" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">『ガンダム』とホロライブが異例のコラボ、VTuber仕様になった特別モビルスーツイラストも</div><div class="article-summary">ガンダムとホロライブが異例のコラボ、VTuber仕様のモビルスーツ登場</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175174" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-1" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-1" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">『幼馴染とはラブコメにならない』第10話、アクシデントに超動揺!?【先行カット】</div><div class="article-summary">ラブコメアニメ第10話、アクシデントで動揺する展開に</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175107" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-2" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-2" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">アニメ『綺麗にしてもらえますか。』第10話、犬に超舐められる「トップクラスの手強さなんです！」【先行カット】</div><div class="article-summary">アニメ『綺麗にしてもらえますか。』第10話、犬との攻防を描く</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175106" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-3" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-3" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">実は児童書もある『転スラ』から今度は“えほん”化　小学生以下にも人気博すメガヒット</div><div class="article-summary">『転スラ』が児童書に続き“えほん”化、小学生以下にも人気</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175056" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-4" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-4" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-ai"><div class="section-header"><div class="section-title">🤖 AI最新情報</div><div class="section-meta"><div class="last-updated" id="upd-ai">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;ai&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-ai" onclick="fetchOne(&#39;ai&#39;)">取得</button></div></div><div id="art-ai"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">「原始人のように自分で書くしかない」…Claudeの障害でソフトウェア開発者はAIへの依存を痛感（海外） - Yahoo!ニュース</div><div class="article-summary">Claude障害で開発者、AI依存を痛感。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMif0FVX3lxTE9xckpGcElxTFMyQ2ZqUXBlY3RURl8taUx3dURhenNhTlp1VVd1WnQ3TkpFMExsVFVYb0FTdjlDdjZpMUhKaFJlNHYtRFY2aVliRVlQUWRhYU1PUmtYUEF3YlIyRG9MQlFRd1QxbHZDd1dSdXcyaTZxb09xelBiMHc?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-0" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-0" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">AnthropicとMozillaが連携、Claude Opus 4.6がFirefoxで100件超のバグをわずか2週間で発見しそのうち14件は高深刻度 - GIGAZINE</div><div class="article-summary">Claude、Firefoxで100超バグ発見。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMidkFVX3lxTE1tOVBGLXRVQ3JJZURBcmw5U3ZaX3hZR0dMYnFyRjhYczB2SmNXVXE4MTdRbVRmUklJRlFoWHUwMGFwb2NLcVN4MDhfVU00UUx0blpkMzV0c3BBRHhRWWlGVFpzRFRBenNDUUV4Y3VVRWd0RmlDZ1E?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-1" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-1" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">【特集】 今さら聞けない「ローカルLLM」。LM Studioなら自分のPCで手軽に試せます！ - PC Watch</div><div class="article-summary">ローカルLLM、LM Studioで手軽に試せる。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMib0FVX3lxTE1Rak02U1VqUWVJYkpGaE82SlcwYTNUVkJmX3lUZnA4cmZEd2t6V185NnZidjc1ZUNwWGxYaWl4SWF0X3RhcFBKcWd5MHVTLVlnX1dadlp0dF9QRGVZRDI0anB3YXRLeFUxVjU3SGpFVQ?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-2" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-2" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">ChatGPTから400万人が離脱、需要急増で対応に苦しむアンソロピックClaude - Forbes JAPAN</div><div class="article-summary">ChatGPTから400万人離脱、Claude対応苦慮。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiWEFVX3lxTE5BT3J1eFJNMllsM1FMV1UwNUhmdTQ0MnpPZ0h3SFZCdFhDRDd6Zk9TNTJiM2xkS09Ja2cxSXhDMnBxN0hCUTRXV0J2T1JIdUl2aVdsZ1U4cUg?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-3" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-3" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">ChatGPTは「弁護士ではない」日本生命の米法人がOpenAI提訴——弁護士資格なしで法律業務と主張 - Ledge.ai</div><div class="article-summary">日本生命米法人、ChatGPT提訴。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMie0FVX3lxTE1Va1lHU0dLRkI1eW41RU1oUk1qeGRkb29yY0xNeHJ1S2E0NDZ1aVVrZkFYUVEyQ0o3LTRSdFI3SlNfZ28tWjQ1b2NUVFVCd3pHUm0zR3A4bzQyU3dDWkhiNEtxbFFhMkw5TFMzb3JCcXY2SHFUb28yODE1QQ?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-4" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-4" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-geopolitics"><div class="section-header"><div class="section-title">🌍 地政学</div><div class="section-meta"><div class="last-updated" id="upd-geopolitics">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;geopolitics&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-geopolitics" onclick="fetchOne(&#39;geopolitics&#39;)">取得</button></div></div><div id="art-geopolitics"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">地政学リスクを乗り越えるITツール 不確実な外部要因に対処</div><div class="article-summary">ITツールで地政学リスクを乗り越える方法。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMieEFVX3lxTE1seXNYVTVvTnRreThiRGVSWG94YzZOX1JLRDdOcVNTeTIyd0tmNGJXZkFnZTZpY3ZrNDF5bGFsVUhLdzVUdjJEWXVla0NKYXNadVlnY2FGamo4RFI4aGtPZEZZMjctQkttNFJJdURUTjUzTVVDU0tfag?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-0" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-0" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">【コラム】 地政学リスクが問う、資源循環の産業安全保障化</div><div class="article-summary">地政学リスクと産業安全保障化の関係。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBtSWFQSWpRUU1NYkIyZUFKUkRsTjY5eDdTSExxcXhBSUR1Y1FYTXp6R0tKaS15TEpZT212ekZQamFjWndiSm5rYTVrLTlFcHhIdmJOcjFvVQ?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-1" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-1" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">米国務省、外交官らにサウジアラビア出国命じる－安全上のリスク</div><div class="article-summary">米国務省がサウジの外交官に国外退避を指示。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMid0FVX3lxTE9XUEI0SVhVdzExOTNKNlJkWWR3dFFzeUFzbnN0YTRLMnltUnJPakpVcC1jMS1Qek5Namg1MnRHZlQ1M3p3MktMVGRuVWpya3Z4QS1rbzVuY0dhZUZNNDB0eVRuQzJDMl9FNm9HX250Y3BGNW1FU0dN?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-2" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-2" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">Diplomacy 2.0とBecoming Chinese 現象：中国が戦狼外交からソフトパワーへ戦略的シフトか 日本への波及リスクも</div><div class="article-summary">中国の外交戦略シフトと日本への影響。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOd2ZtdXFtOWtQWlpyaU9uWFJCbFRvbkNoTVY2d1FMU09CQ2FDNHlzN25LbnRlUlNlVHRyN0kyNzlENFc0b2RDYnY5bmd0Q0FYc0p1ZC1DZE9GNkhmYXg3Mi1xZ2cwYVhTdG1Xelk0OUVMQ092dG1rMzBMYTZlQUlUM24wQWlpcUVVRGVaa0JVRDFtS1p3c1U2ZjBmVFMzTF9ndUxsdWlJcVc4UEk?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-3" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-3" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">マレーシアやノルウェー、地政学リスクに耐性 中東波乱②</div><div class="article-summary">中東情勢と地政学リスクへの耐性。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMifkFVX3lxTE41N0NZWmVpZWlqeW90RHllMndPT2VRaE44Mk00ekhTTUlBbTF3d3hrZHFhRWlBTk5PSEhRbTc0ZERIOWs4ZzRfcnNURjVGX2pWdVZrYld4X1YzYUI4X2hxdVFBMU5uOF9uYzRwOERkbF9HNHA5UmFGNGpzVFB5UQ?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-4" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-4" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-finance"><div class="section-header"><div class="section-title">💹 金融情報</div><div class="section-meta"><div class="last-updated" id="upd-finance">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;finance&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-finance" onclick="fetchOne(&#39;finance&#39;)">取得</button></div></div><div id="art-finance"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">日経平均一時4200円安 吹き飛んだ「イラン楽観シナリオ」 - 日本経済新聞</div><div class="article-summary">イラン情勢の緊迫化で日経平均が大幅下落。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMibEFVX3lxTE1UQnVhUGduc2xLUExxNnhLank5M3JpWFQzU3hGLXFOVDFIb0RteGJZMTgxNm1JcW83cEZDMjBXQlkyQXFIYWVxRllVTmJ5c3Y5cFRnd3dXdlRTdGRnSGEtZy11ODZBZGw0RXVjbw?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-0" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-0" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">日経平均一時4200円超安の5万1400円台 中東情勢で原油急騰 [アメリカとイスラエル、イランを攻撃 報復も] - 朝日新聞</div><div class="article-summary">中東情勢悪化で原油高、日経平均も急落。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTE1vTXZqOUlvOUpsR19hUWNXeG9UeGpaTWhwdWlyWnU5bGZTT3AzVUM0U1FycXFJLU9DeFFPUTJTRndHNDZGMGU1RVhJWmJFZDUxcnVXM0ZUT2hnUzYxXzlERE8wNlJPS2c?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-1" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-1" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">原油価格急騰に伴い東京市場トリプル安、日経平均株価は一時４２００円超急落 - 読売新聞オンライン</div><div class="article-summary">原油高で市場全体が下落、日経平均も大幅安。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiZEFVX3lxTE1mQnhEX01UYV85UTQ3R29UYTVwa0ZpbTJvaW5wTnVVYXY5N0VVZFBINGt6Z2pwcnZXVHpoQzJneU16QVlTSGQwd1plTmc2UERyOFZrejV3Y2xwUC1ycjhybzJxTkE?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-2" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-2" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">日経平均大幅下落、一時3600円超 イラン攻撃の長期化懸念 - 毎日新聞</div><div class="article-summary">イラン攻撃の長期化懸念で日経平均が大幅下落。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiaEFVX3lxTE1NbjdWenZXaW05MEpyUlBMRjh6Z2lXNlRiV1VzM0gwN2RyeTRqbTBpWWZvelZnaWVkalF4N2RpeVV5WnhuLThlNWFfZ2JKUlYyNDdIUlE4MXZIb0VJYVdmbzdMTjJBaVJR?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-3" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-3" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">17:23</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">日経平均株価4200円安「AI銘柄から分散を」「絶好の買い場」 市場の見方 - 日本経済新聞</div><div class="article-summary">日経平均4200円安、市場はAI銘柄分散や買い場と分析。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBQUUUzODdncVVRdURmSVYyVFppQV90ZUF2cnk4UUQ4MEt1cWVic3pKeHA1VWpLSHVSdHBhclhMbmFVOHdRZmttc0hvVzZXY1JnWVJRRDNOMDh1SzNwb3ZrdDNkRlNxUnVxeDF6Tg?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-4" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-4" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div></div>
+<div class="tabs" id="tabs"><button class="tab tab-digest" data-cat="__digest__" onclick="switchTab(this)">⚡ ダイジェスト</button><button class="tab" data-cat="game_4gamer" onclick="switchTab(this)">🎮 ゲーム 4Gamer</button><button class="tab" data-cat="game_gamewatch" onclick="switchTab(this)">🕹 ゲーム GameWatch</button><button class="tab" data-cat="anime_gamewatch" onclick="switchTab(this)">📺 アニメ</button><button class="tab active" data-cat="ai" onclick="switchTab(this)">🤖 AI最新情報</button><button class="tab" data-cat="geopolitics" onclick="switchTab(this)">🌍 地政学</button><button class="tab" data-cat="finance" onclick="switchTab(this)">💹 金融情報</button><button class="tab tab-add" onclick="openAddCat()">＋</button></div>
+<div class="main" id="mainContent"><div class="section" id="sec-__digest__"><div class="section-header"><div class="section-title">⚡ 今日のダイジェスト</div><div class="section-meta"><div class="last-updated" id="upd-__digest__"></div><button class="btn-fetch" id="btn-__digest__" onclick="buildDigest()">生成</button></div></div><div id="art-__digest__"><div class="empty-state"><div class="empty-icon">⚡</div><div class="empty-title">ダイジェスト未生成</div><div class="empty-sub">全カテゴリ取得後に「生成」を押してください</div></div></div></div><div class="section" id="sec-game_4gamer"><div class="section-header"><div class="section-title">🎮 ゲーム 4Gamer</div><div class="section-meta"><div class="last-updated" id="upd-game_4gamer">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;game_4gamer&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-game_4gamer" onclick="fetchOne(&#39;game_4gamer&#39;, true)">取得</button></div></div><div id="art-game_4gamer"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">日本ファルコム創立45周年記念「ドラゴンスレイヤー・プロジェクト」が始動。コンシューマ向けの新プロジェクト</div><div class="article-summary">ファルコム45周年、新プロジェクト始動</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/988/G098873/20260306077/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-0" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-0" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">「空の軌跡 the 2nd」のメインキャラクターとキャスト情報が明らかに。公式サイトが正式にオープンし，ティザートレイラーが公開</div><div class="article-summary">空の軌跡 the 2nd、キャラ・キャスト公開</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/969/G096988/20260306079/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-1" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-1" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">サイコスリラー「家へ帰れ、アニー」，PS5/Xbox Series X|S版を3月31日に発売。SCP財団の下級職員が組織の隠された秘密を解き明かす</div><div class="article-summary">サイコスリラー「家へ帰れ、アニー」発売</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/988/G098896/20260309031/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-2" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-2" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">トランプのカードに閉じ込められた少女と話しながらフリーセル。カード型ADV「種も仕掛けも思い出も」，Steamストアページを公開</div><div class="article-summary">カード型ADV「種も仕掛けも思い出も」</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/988/G098893/20260309028/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-3" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-3" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;game_4gamer&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム 4Gamer</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">「紙岡聖子（仮）に関する考察」を手がけたSIM3の新作「カレキニハナヲ」が公開中。Webサイトを調査する全編無料のミステリーゲーム</div><div class="article-summary">SIM3新作ミステリー「カレキニハナヲ」</div></div></div><div class="article-actions"><a class="btn-source" href="https://www.4gamer.net/games/988/G098887/20260309020/" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_4gamer-4" onclick="event.stopPropagation();likeArticle(&#39;game_4gamer&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_4gamer-4" onclick="event.stopPropagation();dislikeArticle(&#39;game_4gamer&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-game_gamewatch"><div class="section-header"><div class="section-title">🕹 ゲーム GameWatch</div><div class="section-meta"><div class="last-updated" id="upd-game_gamewatch">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;game_gamewatch&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-game_gamewatch" onclick="fetchOne(&#39;game_gamewatch&#39;, true)">取得</button></div></div><div id="art-game_gamewatch"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">【ポケモン】「ポケパーク カントー」ショッピングバッグの販売中止と交換対応を発表。色落ちする可能性が判明</div><div class="article-summary">ポケモンショッピングバッグに色落ちの可能性、販売中止と交換対応を発表。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/news/2091745.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-0" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-0" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">USJ「セサミストリート ・ファン・ワールド」が5月10日をもって終了。特別イベントを3月20日から開催</div><div class="article-summary">USJセサミストリート・ファン・ワールドが5月10日終了、特別イベント開催。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/news/2091726.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-1" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-1" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">ローソン「ホロライブ」コラボが3月17日より開催！ オリジナルグッズの販売も</div><div class="article-summary">ローソンとホロライブが3月17日よりコラボ、オリジナルグッズ販売。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/news/2091672.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-2" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-2" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">「フォートナイト」、星街すいせいさんとのコラボ予告を公開すいちゃんが「フォトナ」にやってくる</div><div class="article-summary">フォートナイトと星街すいせいさんのコラボ予告公開、すいちゃんが参戦。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/news/2091664.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-3" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-3" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;game_gamewatch&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-game">ゲーム GameWatch</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">「パラノマサイト 伊勢人魚物語」に出てくるあの場所を激写！ 物語の舞台・三重に聖地巡礼写真満載で現地の空気感をお届け！</div><div class="article-summary">「パラノマサイト」聖地巡礼レポート、三重の舞台を写真で紹介。</div></div></div><div class="article-actions"><a class="btn-source" href="https://game.watch.impress.co.jp/docs/kikaku/2091516.html" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-game_gamewatch-4" onclick="event.stopPropagation();likeArticle(&#39;game_gamewatch&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-game_gamewatch-4" onclick="event.stopPropagation();dislikeArticle(&#39;game_gamewatch&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-anime_gamewatch"><div class="section-header"><div class="section-title">📺 アニメ</div><div class="section-meta"><div class="last-updated" id="upd-anime_gamewatch">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;anime_gamewatch&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-anime_gamewatch" onclick="fetchOne(&#39;anime_gamewatch&#39;, true)">取得</button></div></div><div id="art-anime_gamewatch"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">高額132万円でも「予定数終了」攻殻機動隊の“等身大”草薙素子フィギュア、要望受け追加受注</div><div class="article-summary">攻殻機動隊の等身大フィギュアが完売、追加受注へ</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175190" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-0" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-0" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">『ガンダム』とホロライブが異例のコラボ、VTuber仕様になった特別モビルスーツイラストも</div><div class="article-summary">ガンダムとホロライブが異例のコラボ、VTuber仕様のモビルスーツ登場</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175174" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-1" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-1" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">『幼馴染とはラブコメにならない』第10話、アクシデントに超動揺!?【先行カット】</div><div class="article-summary">ラブコメアニメ第10話、アクシデントで動揺する展開に</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175107" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-2" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-2" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">アニメ『綺麗にしてもらえますか。』第10話、犬に超舐められる「トップクラスの手強さなんです！」【先行カット】</div><div class="article-summary">アニメ『綺麗にしてもらえますか。』第10話、犬との攻防を描く</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175106" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-3" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-3" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;anime_gamewatch&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-anime">アニメ</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">実は児童書もある『転スラ』から今度は“えほん”化　小学生以下にも人気博すメガヒット</div><div class="article-summary">『転スラ』が児童書に続き“えほん”化、小学生以下にも人気</div></div></div><div class="article-actions"><a class="btn-source" href="https://0115765.com/archives/175056" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-anime_gamewatch-4" onclick="event.stopPropagation();likeArticle(&#39;anime_gamewatch&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-anime_gamewatch-4" onclick="event.stopPropagation();dislikeArticle(&#39;anime_gamewatch&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section active" id="sec-ai"><div class="section-header"><div class="section-title">🤖 AI最新情報</div><div class="section-meta"><div class="last-updated" id="upd-ai">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;ai&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-ai" onclick="fetchOne(&#39;ai&#39;, true)">取得</button></div></div><div id="art-ai"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">「原始人のように自分で書くしかない」…Claudeの障害でソフトウェア開発者はAIへの依存を痛感（海外） - Yahoo!ニュース</div><div class="article-summary">Claude障害で開発者、AI依存を痛感。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMif0FVX3lxTE9xckpGcElxTFMyQ2ZqUXBlY3RURl8taUx3dURhenNhTlp1VVd1WnQ3TkpFMExsVFVYb0FTdjlDdjZpMUhKaFJlNHYtRFY2aVliRVlQUWRhYU1PUmtYUEF3YlIyRG9MQlFRd1QxbHZDd1dSdXcyaTZxb09xelBiMHc?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-0" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-0" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">AnthropicとMozillaが連携、Claude Opus 4.6がFirefoxで100件超のバグをわずか2週間で発見しそのうち14件は高深刻度 - GIGAZINE</div><div class="article-summary">Claude、Firefoxで100超バグ発見。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMidkFVX3lxTE1tOVBGLXRVQ3JJZURBcmw5U3ZaX3hZR0dMYnFyRjhYczB2SmNXVXE4MTdRbVRmUklJRlFoWHUwMGFwb2NLcVN4MDhfVU00UUx0blpkMzV0c3BBRHhRWWlGVFpzRFRBenNDUUV4Y3VVRWd0RmlDZ1E?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-1" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-1" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">【特集】 今さら聞けない「ローカルLLM」。LM Studioなら自分のPCで手軽に試せます！ - PC Watch</div><div class="article-summary">ローカルLLM、LM Studioで手軽に試せる。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMib0FVX3lxTE1Rak02U1VqUWVJYkpGaE82SlcwYTNUVkJmX3lUZnA4cmZEd2t6V185NnZidjc1ZUNwWGxYaWl4SWF0X3RhcFBKcWd5MHVTLVlnX1dadlp0dF9QRGVZRDI0anB3YXRLeFUxVjU3SGpFVQ?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-2" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-2" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">ChatGPTから400万人が離脱、需要急増で対応に苦しむアンソロピックClaude - Forbes JAPAN</div><div class="article-summary">ChatGPTから400万人離脱、Claude対応苦慮。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiWEFVX3lxTE5BT3J1eFJNMllsM1FMV1UwNUhmdTQ0MnpPZ0h3SFZCdFhDRDd6Zk9TNTJiM2xkS09Ja2cxSXhDMnBxN0hCUTRXV0J2T1JIdUl2aVdsZ1U4cUg?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-3" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-3" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;ai&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-ai">AI最新情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">ChatGPTは「弁護士ではない」日本生命の米法人がOpenAI提訴——弁護士資格なしで法律業務と主張 - Ledge.ai</div><div class="article-summary">日本生命米法人、ChatGPT提訴。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMie0FVX3lxTE1Va1lHU0dLRkI1eW41RU1oUk1qeGRkb29yY0xNeHJ1S2E0NDZ1aVVrZkFYUVEyQ0o3LTRSdFI3SlNfZ28tWjQ1b2NUVFVCd3pHUm0zR3A4bzQyU3dDWkhiNEtxbFFhMkw5TFMzb3JCcXY2SHFUb28yODE1QQ?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-ai-4" onclick="event.stopPropagation();likeArticle(&#39;ai&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-ai-4" onclick="event.stopPropagation();dislikeArticle(&#39;ai&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-geopolitics"><div class="section-header"><div class="section-title">🌍 地政学</div><div class="section-meta"><div class="last-updated" id="upd-geopolitics">更新: 16:59</div><button class="btn-cat-edit" onclick="openEditCat(&#39;geopolitics&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-geopolitics" onclick="fetchOne(&#39;geopolitics&#39;, true)">取得</button></div></div><div id="art-geopolitics"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">地政学リスクを乗り越えるITツール 不確実な外部要因に対処</div><div class="article-summary">ITツールで地政学リスクを乗り越える方法。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMieEFVX3lxTE1seXNYVTVvTnRreThiRGVSWG94YzZOX1JLRDdOcVNTeTIyd0tmNGJXZkFnZTZpY3ZrNDF5bGFsVUhLdzVUdjJEWXVla0NKYXNadVlnY2FGamo4RFI4aGtPZEZZMjctQkttNFJJdURUTjUzTVVDU0tfag?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-0" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-0" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">【コラム】 地政学リスクが問う、資源循環の産業安全保障化</div><div class="article-summary">地政学リスクと産業安全保障化の関係。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiV0FVX3lxTFBtSWFQSWpRUU1NYkIyZUFKUkRsTjY5eDdTSExxcXhBSUR1Y1FYTXp6R0tKaS15TEpZT212ekZQamFjWndiSm5rYTVrLTlFcHhIdmJOcjFvVQ?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-1" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-1" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">米国務省、外交官らにサウジアラビア出国命じる－安全上のリスク</div><div class="article-summary">米国務省がサウジの外交官に国外退避を指示。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMid0FVX3lxTE9XUEI0SVhVdzExOTNKNlJkWWR3dFFzeUFzbnN0YTRLMnltUnJPakpVcC1jMS1Qek5Namg1MnRHZlQ1M3p3MktMVGRuVWpya3Z4QS1rbzVuY0dhZUZNNDB0eVRuQzJDMl9FNm9HX250Y3BGNW1FU0dN?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-2" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-2" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">Diplomacy 2.0とBecoming Chinese 現象：中国が戦狼外交からソフトパワーへ戦略的シフトか 日本への波及リスクも</div><div class="article-summary">中国の外交戦略シフトと日本への影響。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiqwFBVV95cUxOd2ZtdXFtOWtQWlpyaU9uWFJCbFRvbkNoTVY2d1FMU09CQ2FDNHlzN25LbnRlUlNlVHRyN0kyNzlENFc0b2RDYnY5bmd0Q0FYc0p1ZC1DZE9GNkhmYXg3Mi1xZ2cwYVhTdG1Xelk0OUVMQ092dG1rMzBMYTZlQUlUM24wQWlpcUVVRGVaa0JVRDFtS1p3c1U2ZjBmVFMzTF9ndUxsdWlJcVc4UEk?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-3" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-3" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;geopolitics&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-geo">地政学</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">マレーシアやノルウェー、地政学リスクに耐性 中東波乱②</div><div class="article-summary">中東情勢と地政学リスクへの耐性。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMifkFVX3lxTE41N0NZWmVpZWlqeW90RHllMndPT2VRaE44Mk00ekhTTUlBbTF3d3hrZHFhRWlBTk5PSEhRbTc0ZERIOWs4ZzRfcnNURjVGX2pWdVZrYld4X1YzYUI4X2hxdVFBMU5uOF9uYzRwOERkbF9HNHA5UmFGNGpzVFB5UQ?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-geopolitics-4" onclick="event.stopPropagation();likeArticle(&#39;geopolitics&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-geopolitics-4" onclick="event.stopPropagation();dislikeArticle(&#39;geopolitics&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div><div class="section" id="sec-finance"><div class="section-header"><div class="section-title">💹 金融情報</div><div class="section-meta"><div class="last-updated" id="upd-finance">更新: 18:19</div><button class="btn-cat-edit" onclick="openEditCat(&#39;finance&#39;)" "="">＋ 参照記事サイトを追加</button><button class="btn-fetch" id="btn-finance" onclick="fetchOne(&#39;finance&#39;, true)">取得</button></div></div><div id="art-finance"><div class="articles"><div class="article-card" style="animation-delay:0s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,0)"><div class="article-num">01</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div></div></div><div class="article-title">午前の日経平均は大幅反落、一時4000円超安 イラン情勢懸念で全面安 - Reuters</div><div class="article-summary">イラン情勢への懸念から、東京株式市場は全面安の展開となった。日経平均株価は午前に一時4000円を超える大幅な下落を記録し、投資家心理が悪化したことがうかがえる。市場全体に売り圧力がかかり、幅広い銘柄が値を下げた。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQdGZEM3ByMWNNU1FpSEtqT3FXeGt2aVFuUFZoMDU2MjFsSS0xQ0pFQ29XSF9OX2pxOFVVUFVQMkV3S1d3SThSaVJqR2hCTThSak9tdFg1WHhxejJfelM2MnBRXzFNcFlhZ3puMW5iM0lFelBvWUFHd0xjWW9fZHlxOA?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-0" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,0)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-0" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,0)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.06s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,1)"><div class="article-num">02</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">日経平均株価、過去３番目の下げ幅…終値は２８９２円安の５万２７２８円 - 読売新聞オンライン</div><div class="article-summary">日経平均株価は終値で2892円安となり、過去3番目の下げ幅を記録した。終値は5万2728円。市場では、この大幅な下落が今後の日本株にどのような影響を与えるか注目されている。短期的な調整なのか、それともより長期的なトレンドの変化を示唆するのか、分析が求められる。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiZEFVX3lxTE9IZlpDM3pEeVRBVFlSaTZYS2FKak55anlLR0lXNXlRQ21wVGhfMWZCb2JsUUdUN0dScGlFNFBiUFFxdmM1eDZzVC1QVWJHUWhXbW50LVFkZk43TkxkUWdaOXA3eHg?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-1" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,1)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-1" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,1)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.12s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,2)"><div class="article-num">03</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">日経平均急落、消えた押し目買い 「底はまだ先」見据える5万円割れ - 日本経済新聞</div><div class="article-summary">日経平均株価の急落により、これまで見られていた押し目買いの動きが消滅した。市場関係者の間では、「底はまだ先」との見方が強まっており、5万円割れの可能性も視野に入れている。今後の市場動向を慎重に見極める必要がある。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMibEFVX3lxTE5vYjZWMlpfcUFxLWZoTmRDZGhaUUdzbVZ0aUp6UFpRQUkzRENXZFg5elh5ak80YXJycEc1RXVjbTBILTZuTmxYSkR3ODgwZXRlTmpLMUIwX1RvNU1mMUVsYmdDYlh6eGplcHF5bg?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-2" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,2)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-2" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,2)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.18s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,3)"><div class="article-num">04</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div></div></div><div class="article-title">【速報】日経平均株価は２８９２円安と、歴代３番目の下落幅を記録し取引を終えた - 時事ドットコム</div><div class="article-summary">日経平均株価は取引を終え、2892円安となった。これは歴代3番目の下落幅であり、市場に大きな衝撃を与えた。この急落の背景には、地政学リスクの高まりや、投資家心理の悪化などが考えられる。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMiZkFVX3lxTFBMblRjZzdCVEphNHVmMTRXcUJOUDNMRGF0N3YyckZuaXFRWURqZlRRWk5nWGUyMEtTNFlNLUZFLUJTU0tkVmxyN2xkNzJLLTkxcXplUWhRSnpCU3Njbl9JLTQ3UTVpdw?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-3" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,3)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-3" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,3)" title="興味なし">👎</button></div></div></div><div class="article-card" style="animation-delay:0.24s"><div class="article-main" onclick="openDetail(&#39;finance&#39;,4)"><div class="article-num">05</div><div class="article-body"><div class="article-tags"><div class="article-tag tag-fin">金融情報</div><div class="article-time">18:20</div><div class="imp"><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot on"></div><div class="imp-dot"></div><div class="imp-dot"></div></div></div><div class="article-title">日経平均株価4200円安「AI銘柄から分散を」「絶好の買い場」 市場の見方 - 日本経済新聞</div><div class="article-summary">日経平均株価が一時4200円安となる中、市場ではAI関連銘柄からの分散投資を推奨する声や、逆に「絶好の買い場」と捉える見方が出ている。この大幅な下落を、今後の投資戦略を見直す機会と捉える動きもある。</div></div></div><div class="article-actions"><a class="btn-source" href="https://news.google.com/rss/articles/CBMibEFVX3lxTFBQUUUzODdncVVRdURmSVYyVFppQV90ZUF2cnk4UUQ4MEt1cWVic3pKeHA1VWpLSHVSdHBhclhMbmFVOHdRZmttc0hvVzZXY1JnWVJRRDNOMDh1SzNwb3ZrdDNkRlNxUnVxeDF6Tg?oc=5" target="_blank">↗ 元記事</a><div class="pref-row"><button class="btn-pref btn-like" id="like-finance-4" onclick="event.stopPropagation();likeArticle(&#39;finance&#39;,4)" title="興味あり">👍</button><button class="btn-pref btn-dislike" id="dislike-finance-4" onclick="event.stopPropagation();dislikeArticle(&#39;finance&#39;,4)" title="興味なし">👎</button></div></div></div></div></div></div></div>
 
 <!-- DETAIL PAGE -->
-<div class="detail-page open" id="detailPage">
+<div class="detail-page" id="detailPage">
   <div class="detail-inner">
     <button class="detail-back" onclick="closeDetail()">← 一覧に戻る</button>
-    <div class="detail-tag-wrap"><span class="detail-tag tag-game" id="detailTag">ゲーム 4Gamer</span></div>
-    <div class="detail-title" id="detailTitle">「空の軌跡 the 2nd」のメインキャラクターとキャスト情報が明らかに。公式サイトが正式にオープンし，ティザートレイラーが公開</div>
+    <div class="detail-tag-wrap"><span class="detail-tag tag-ai" id="detailTag">AI最新情報</span></div>
+    <div id="detailHero" class="detail-hero-wrap"><img src="./DIGEST_files/unnamed.webp" class="detail-hero" alt="「原始人のように自分で書くしかない」…Claudeの障害でソフトウェア開発者はAIへの依存を痛感（海外） - Yahoo!ニュース"></div><div class="detail-title" id="detailTitle">「原始人のように自分で書くしかない」…Claudeの障害でソフトウェア開発者はAIへの依存を痛感（海外） - Yahoo!ニュース</div>
     <div class="detail-divider"></div>
-    <div id="detailBody"><div class="detail-intro"><div class="detail-intro-row"><span class="detail-intro-label">📌 内容</span><span class="detail-intro-val">「空の軌跡 the 2nd」キャラ・キャスト公開、公式サイトオープン</span></div><div class="detail-intro-row"><span class="detail-intro-label">👤 対象</span><span class="detail-intro-val">空の軌跡ファン、RPGファン</span></div></div><div class="detail-content"><p>日本ファルコムが贈る人気RPGシリーズ「軌跡」の最新作、「空の軌跡 the 2nd」に関する待望の情報が、ついに公式に解禁されました。公式サイトが正式にオープンし、本作のメインキャラクターとその声を担当する豪華キャスト陣が明らかになったのです。この情報は、長らく続編を待ち望んでいた多くのファンにとって、まさに朗報と言えるでしょう。ティザートレーラーも同時に公開されており、ゲームの世界観や雰囲気を垣間見ることができるため、期待感はさらに高まっています。</p><p>「空の軌跡 the 2nd」は、前作「空の軌跡FC」および「空の軌跡SC」の物語から続く、リベール王国の新たな冒険を描く作品です。前作で描かれた壮大な物語の結末から、どのような展開が待ち受けているのか、多くのプレイヤーが固唾を飲んで見守っていました。今回公開されたメインキャラクターの情報は、物語の核心に迫る重要な手がかりとなるはずです。彼らがどのような役割を担い、どのようなドラマを紡ぎ出すのか、そして彼らを演じる声優陣がどのようにキャラクターに命を吹き込むのか、注目が集まっています。</p><p>公式サイトのオープンは、単に情報公開の場に留まらず、今後のゲームに関する詳細情報の発信拠点となります。ゲームシステム、ストーリー、登場人物の詳細、そして発売日などの最新情報が随時更新されていくことが予想されます。ティザートレーラーは、ゲームのビジュアルや音楽、そしてキャラクターボイスの一部を体験できる貴重な機会であり、プレイヤーの想像力を掻き立てるものとなっています。これらの情報解禁は、「空の軌跡 the 2nd」が本格的なプロモーションフェーズに入ったことを示しており、発売に向けてますます盛り上がりを見せることでしょう。シリーズファンはもちろん、壮大なファンタジーRPGの世界に興味がある方々にとっても、見逃せないニュースと言えます。</p></div></div>
-    <div class="detail-footer" id="detailFooter" style="display: block;">
-      <a class="btn-source-lg" id="detailSourceBtn" href="https://www.4gamer.net/games/969/G096988/20260306079/" target="_blank">↗ 元記事を読む</a>
+    <div id="detailBody"><div class="detail-intro"><div class="detail-intro-row"><span class="detail-intro-label">📌 内容</span><span class="detail-intro-val">AIが使えず、開発者は昔ながらの方法で作業した。</span></div><div class="detail-intro-row"><span class="detail-intro-label">👤 対象</span><span class="detail-intro-val">AIツールを仕事で使っているプログラマーや、AIの進化に興味がある学生、最新技術の動向を知りたいビジネスパーソン。</span></div></div><div class="detail-content"><p>AIのチャットボット「Claude」が一時的に使えなくなったことで、ソフトウェアを作る人たちが、AIに頼りすぎていたことを実感しました。AIが動かない間は、まるで昔の「原始人」のように、自分で一つ一つコードを書くしかありませんでした。</p><p>これは、AIが私たちの仕事にどれだけ深く入り込んでいるかを示す出来事です。まるで、便利な道具が壊れた時に、昔ながらの道具で作業するようなものです。AIは、プログラムを作るスピードを速めたり、難しい問題を解決したりするのに役立ちますが、それが使えなくなると、基本に戻る必要が出てきます。</p><p>今後、AIがさらに進化しても、AIだけに頼るのではなく、自分の力もきちんとつけておくことの重要性が増すでしょう。AIを上手に使いこなしつつ、いざという時に困らないように、基礎的なスキルを磨くことが大切になります。</p></div></div>
+    <div class="detail-footer" id="detailFooter" style="display: flex;" data-cat-id="ai" data-idx="0">
+      <a class="btn-source-lg" id="detailSourceBtn" href="https://news.google.com/rss/articles/CBMif0FVX3lxTE9xckpGcElxTFMyQ2ZqUXBlY3RURl8taUx3dURhenNhTlp1VVd1WnQ3TkpFMExsVFVYb0FTdjlDdjZpMUhKaFJlNHYtRFY2aVliRVlQUWRhYU1PUmtYUEF3YlIyRG9MQlFRd1QxbHZDd1dSdXcyaTZxb09xelBiMHc?oc=5" target="_blank">↗ 元記事を読む</a>
+      <button class="btn-detail-pref btn-detail-like" id="detailLikeBtn" onclick="detailLike()">👍 興味あり</button>
+      <button class="btn-detail-pref btn-detail-dislike" id="detailDislikeBtn" onclick="detailDislike()">👎 興味なし</button>
     </div>
   </div>
 </div>
 
 <!-- SETTINGS MODAL -->
 <div class="modal-overlay" id="settingsOverlay">
-  <div class="modal-panel">
+  <div class="modal-panel" style="width:560px;">
     <div class="modal-title">⚙ 設定</div>
-    <div class="api-guide">
-      <div class="api-guide-title">📋 APIキーの取得方法（無料・3分）</div>
-      <div class="api-steps">
-        <div class="api-step"><div class="api-step-num">1</div><div class="api-step-text"><a href="https://aistudio.google.com/apikey" target="_blank"><strong>aistudio.google.com/apikey</strong></a> を開く</div></div>
-        <div class="api-step"><div class="api-step-num">2</div><div class="api-step-text">Googleアカウントでログイン（<strong>有料プラン不要</strong>）</div></div>
-        <div class="api-step"><div class="api-step-num">3</div><div class="api-step-text">青い <strong>「Create API key」</strong> ボタンをクリック</div></div>
-        <div class="api-step"><div class="api-step-num">4</div><div class="api-step-text"><strong>「AIza...」</strong> から始まるキーをコピーして下に貼り付け</div></div>
+
+    <!-- タブ -->
+    <div class="settings-tabs">
+      <button class="settings-tab active" id="tab-key" onclick="switchSettingsTab(&#39;key&#39;)">🔑 APIキー設定</button>
+      <button class="settings-tab" id="tab-billing" onclick="switchSettingsTab(&#39;billing&#39;)">⚡ 制限解除（推奨）</button>
+    </div>
+
+    <!-- タブ：APIキー取得 -->
+    <div id="settings-pane-key">
+      <div class="api-guide">
+        <div class="api-guide-title">📋 APIキーの取得方法（無料・3分）</div>
+        <div class="api-steps">
+          <div class="api-step"><div class="api-step-num">1</div><div class="api-step-text"><a href="https://aistudio.google.com/apikey" target="_blank"><strong>aistudio.google.com/apikey</strong></a> を新しいタブで開く</div></div>
+          <div class="api-step"><div class="api-step-num">2</div><div class="api-step-text">Googleアカウントでログイン（Gmailのアカウントでそのまま使えます）</div></div>
+          <div class="api-step"><div class="api-step-num">3</div><div class="api-step-text">青い <strong>「Create API key」</strong> ボタンをクリック → <strong>「Create API key in new project」</strong> を選択</div></div>
+          <div class="api-step"><div class="api-step-num">4</div><div class="api-step-text"><strong>「AIza...」</strong> から始まる長い文字列が表示される → コピーして下の入力欄に貼り付け</div></div>
+        </div>
+        <div class="api-warn">⚠️ <strong>無料枠の制限について</strong><br>現在Googleの無料枠は <strong>1日20回</strong> までに制限されています。たくさん使う場合は「⚡ 制限解除」タブを参照してください（追加費用なし）。</div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Gemini API Key</label>
+        <input type="password" class="form-input" id="apiKeyInput" placeholder="AIza...">
+        <div class="form-hint">このブラウザにのみ保存されます。外部には送信されません。</div>
       </div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Gemini API Key</label>
-      <input type="password" class="form-input" id="apiKeyInput" placeholder="AIza...">
-      <div class="form-hint">ブラウザにのみ保存。無料枠: 1日1500リクエスト / 1分15リクエスト</div>
+
+    <!-- タブ：Billing設定レクチャー -->
+    <div id="settings-pane-billing" style="display:none;">
+      <div class="api-guide">
+        <div class="api-guide-title">⚡ 1日20回 → 1500回以上に増やす方法</div>
+        <div class="billing-explain">
+          カードを登録するだけで制限が一気に緩和されます。<br>
+          <strong>使わなければ課金は一切ゼロです。</strong>月数円〜数十円程度の使用量なので実質無料です。
+        </div>
+        <div class="api-steps">
+          <div class="api-step">
+            <div class="api-step-num">1</div>
+            <div class="api-step-text">
+              <a href="https://aistudio.google.com/apikey" target="_blank"><strong>aistudio.google.com/apikey</strong></a> を新しいタブで開く<br>
+              <span style="color:#666;font-size:0.75rem;">※ 同じGoogleアカウントでログインしてください</span>
+            </div>
+          </div>
+          <div class="api-step">
+            <div class="api-step-num">2</div>
+            <div class="api-step-text">
+              APIキーの一覧の右側に <strong>「Set up billing」</strong> というリンクがある → クリック<br>
+              <span style="color:#666;font-size:0.75rem;">※ すでに設定済みの場合はこのリンクがありません（設定完了済みです）</span>
+            </div>
+          </div>
+          <div class="api-step">
+            <div class="api-step-num">3</div>
+            <div class="api-step-text">
+              Google Cloud の請求設定画面に移動する → アカウント名・国・クレジットカードを入力して <strong>「Submit and enable billing」</strong> をクリック<br>
+              <span style="color:#666;font-size:0.75rem;">※ $1 の仮請求が入りますがすぐ返金されます。本請求ではありません</span>
+            </div>
+          </div>
+          <div class="api-step">
+            <div class="api-step-num">4</div>
+            <div class="api-step-text">
+              AI Studioに戻り、再度 <strong>「Set up billing」</strong> をクリック → <strong>「Link a billing account」</strong> → 作成した請求先アカウントを選択 → <strong>「Set account」</strong><br>
+              <span style="color:#666;font-size:0.75rem;">※ このリンク手順を忘れると制限が解除されません</span>
+            </div>
+          </div>
+          <div class="api-step">
+            <div class="api-step-num">5</div>
+            <div class="api-step-text">
+              APIキー一覧の表示が <strong>「Paid account」</strong> になれば完了！<br>
+              制限が <strong>1日1500回以上</strong> に緩和されます（すぐ〜数分で反映）
+            </div>
+          </div>
+        </div>
+        <div class="billing-faq">
+          <div class="billing-faq-q">💡 本当に無料なの？</div>
+          <div class="billing-faq-a">DIGESTの使い方（1日3回×6カテゴリ程度）なら月 <strong>$0.01〜$0.10</strong>（約1〜15円）未満です。Google Cloudには $300 の無料クレジットもあるので、しばらくは実質完全無料です。</div>
+          <div class="billing-faq-q">💡 いつでも解約できる？</div>
+          <div class="billing-faq-a">はい。Google Cloudのコンソールからいつでも請求先アカウントを削除できます。</div>
+        </div>
+      </div>
     </div>
+
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeSettings()">キャンセル</button>
       <button class="btn-save" onclick="saveSettings()">保存</button>
@@ -446,7 +530,7 @@ function buildUI(){
     mh += '<div class="section-header"><div class="section-title">' + cat.icon + ' ' + cat.label + '</div>';
     mh += '<div class="section-meta"><div class="last-updated" id="upd-' + id + '"></div>';
     mh += '<button class="btn-cat-edit" onclick="openEditCat(\'' + id + '\')" ">＋ 参照記事サイトを追加</button>';
-    mh += '<button class="btn-fetch" id="btn-' + id + '" onclick="fetchOne(\'' + id + '\')">取得</button></div></div>';
+    mh += '<button class="btn-fetch" id="btn-' + id + '" onclick="fetchOne(\'' + id + '\', true)">取得</button></div></div>';
     mh += '<div id="art-' + id + '"><div class="empty-state"><div class="empty-icon">' + cat.icon + '</div><div class="empty-title">データなし</div><div class="empty-sub">「取得」ボタンで読み込む</div></div></div></div>';
   });
   mainEl.innerHTML = mh;
@@ -509,9 +593,21 @@ async function fetchRSS(url){
     if(pub){ var d=new Date(pub); if(!isNaN(d)&&d.getTime()<cutoff) continue; }
     var urlMatch = desc.match(/href="(https?:\/\/(?!news\.google\.com)[^"]+)"/);
     var finalLink = (urlMatch && urlMatch[1]) || link.trim();
+    // 画像URL取得（複数パターン対応）
+    var img = '';
+    // media:content, media:thumbnail
+    var imgM = b.match(/<media:(?:content|thumbnail)[^>]+url="([^"]+)"/i);
+    if(imgM) img = imgM[1];
+    // enclosure
+    if(!img){ var encM = b.match(/<enclosure[^>]+url="([^"]+\.(?:jpg|jpeg|png|webp|gif))"[^>]*type="image/i); if(encM) img = encM[1]; }
+    if(!img){ var encM2 = b.match(/<enclosure[^>]+type="image[^"]*"[^>]+url="([^"]+)"/i); if(encM2) img = encM2[1]; }
+    // description内の<img src>
+    if(!img){ var imgTag = desc.match(/<img[^>]+src="(https?:\/\/[^"]+\.(?:jpg|jpeg|png|webp|gif)[^"]*)"/i); if(imgTag) img = imgTag[1]; }
+    if(!img){ var imgTag2 = desc.match(/<img[^>]+src='(https?:\/\/[^']+)'/i); if(imgTag2) img = imgTag2[1]; }
     if(title.trim()) items.push({
       title: title.trim().replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'"),
-      link: finalLink
+      link: finalLink,
+      image: img
     });
   }
   return items.slice(0,15);
@@ -521,7 +617,7 @@ async function fetchRSS(url){
 async function gemini(prompt, maxTokens){
   maxTokens = maxTokens || 2000;
   var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=' + getKey();
-  for(var attempt=0; attempt<2; attempt++){
+  for(var attempt=0; attempt<4; attempt++){
     var res = await fetch(url, {
       method:'POST',
       headers:{'Content-Type':'application/json'},
@@ -529,16 +625,24 @@ async function gemini(prompt, maxTokens){
         contents:[{parts:[{text:prompt}]}],
         generationConfig:{temperature:0.1, maxOutputTokens:maxTokens}
       }),
-      signal: AbortSignal.timeout(30000)
+      signal: AbortSignal.timeout(40000)
     });
     var data = await res.json();
     if(data.error){
       var msg = data.error.message || '';
-      if(msg.toLowerCase().indexOf('quota') !== -1 && attempt < 1){
+      var isQuota = msg.toLowerCase().indexOf('quota') !== -1;
+      var isLimit = msg.indexOf('limit: 20') !== -1 || msg.indexOf('free_tier') !== -1;
+      if(isQuota && attempt < 3){
         var mm = msg.match(/retry in ([0-9.]+)s/i);
-        var waitMs = mm ? Math.min((parseFloat(mm[1])+2)*1000, 15000) : 15000;
-        showBanner('⏳ ' + Math.round(waitMs/1000) + '秒後に自動リトライ…');
-        await new Promise(function(r){ setTimeout(r, waitMs); });
+        var waitSec = mm ? Math.ceil(parseFloat(mm[1])) + 2 : 20;
+        // 1日20回制限（RPD）に当たった場合は早期終了
+        if(isLimit && attempt === 0){
+          var billingMsg = '1日の上限（20回）に達しました。⚙設定 → ⚡制限解除 でBillingを有効にすると1500回以上になります。';
+          showBanner('⚠️ ' + billingMsg, 8000);
+          throw new Error(billingMsg);
+        }
+        showBanner('⏳ レート制限: ' + waitSec + '秒待機してリトライ (' + (attempt+1) + '/3)…');
+        await new Promise(function(r){ setTimeout(r, waitSec * 1000); });
         continue;
       }
       throw new Error(msg);
@@ -552,10 +656,23 @@ async function gemini(prompt, maxTokens){
 }
 
 // ===== FETCH ONE CATEGORY =====
-async function fetchOne(catId){
+// キャッシュが新鮮かチェック（3時間以内 = フレッシュ）
+function isCacheFresh(catId){
+  var c = cache[catId];
+  if(!c || !c.updatedAt || !c.articles || !c.articles.length) return false;
+  return (Date.now() - new Date(c.updatedAt).getTime()) < 3*60*60*1000;
+}
+
+async function fetchOne(catId, forceRefresh){
   if(!getKey()){ openSettings(); return; }
   var cat = CATS[catId];
   if(!cat) return;
+  // キャッシュが新鮮な場合はスキップ（強制更新でない限り）
+  if(!forceRefresh && isCacheFresh(catId)){
+    var box2 = document.getElementById('art-' + catId);
+    if(box2 && cache[catId].articles) renderArticles(catId, cache[catId].articles);
+    return;
+  }
   var btn = document.getElementById('btn-' + catId);
   var box = document.getElementById('art-' + catId);
   if(btn){ btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> 取得中'; }
@@ -570,7 +687,7 @@ async function fetchOne(catId){
     var headlines = items.map(function(it,i){ return '['+i+'] '+it.title; }).join('\n');
     var today = new Date().toLocaleDateString('ja-JP');
     var prefStr = getPrefsPrompt();
-    var prompt = '「' + cat.label + '」ヘッドライン:\n' + headlines + '\n\n重要5件をJSONのみで返せ。[から]で終わること。' + prefStr + '\n[{"index":番号,"title":"タイトルそのまま","summary":"30字以内","tag":"' + cat.label + '","importance":1-5}]';
+    var prompt = '「' + cat.label + '」ヘッドライン:\n' + headlines + '\n\n重要5件をJSONのみで返せ。[から]で終わること。' + prefStr + '\n[{"index":番号,"title":"タイトルそのまま","summary":"100〜200字で内容を具体的に","tag":"' + cat.label + '","importance":1-5}]';
     var raw = await gemini(prompt, 4000);
     var s = raw.indexOf('['), e = raw.lastIndexOf(']');
     if(s===-1||e===-1) throw new Error('JSONパース失敗: ' + raw.slice(0,80));
@@ -583,7 +700,7 @@ async function fetchOne(catId){
           if(items[i].title.indexOf((a.title||'').slice(0,15)) !== -1){ matched=items[i]; break; }
         }
       }
-      return {title:a.title, summary:a.summary, tag:a.tag, importance:a.importance, link:matched?matched.link:''};
+      return {title:a.title, summary:a.summary, tag:a.tag, importance:a.importance, link:matched?matched.link:'', image:matched?matched.image||'':''};
     });
     cache[catId] = {articles:result, updatedAt:new Date().toISOString()};
     saveCache();
@@ -597,15 +714,27 @@ async function fetchOne(catId){
   }
 }
 
+
 async function fetchAll(auto){
   if(!getKey()){ openSettings(); return; }
   var btn = document.getElementById('fetchAllBtn');
-  btn.disabled=true; btn.textContent='取得中...';
   var catIds = Object.keys(CATS);
-  await Promise.all(catIds.map(function(id){ return fetchOne(id); }));
+  var toFetch = catIds.filter(function(id){ return !isCacheFresh(id); });
+  if(auto && toFetch.length === 0){
+    showBanner('✅ 全カテゴリ取得済み（キャッシュ利用中）');
+    return;
+  }
+  btn.disabled=true; btn.textContent='取得中...(' + toFetch.length + '件)';
+  // RPM制限対策：直列で1.2秒間隔を空けて実行
+  for(var i=0; i<catIds.length; i++){
+    var needFetch = !isCacheFresh(catIds[i]);
+    await fetchOne(catIds[i], false);
+    if(needFetch && i < catIds.length-1) await new Promise(function(r){ setTimeout(r, 1200); });
+  }
   btn.disabled=false; btn.textContent='⚡ 全取得';
   var now = new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
-  showBanner('✅ 全カテゴリ更新完了 ' + now);
+  var cached = catIds.length - toFetch.length;
+  showBanner('✅ 全カテゴリ更新完了 ' + now + (cached > 0 ? '（' + cached + '件はキャッシュ利用）' : ''));
   if(Notification.permission==='granted'){
     new Notification('📰 DIGEST 更新完了 ' + now, {body:'全カテゴリの最新情報を取得しました'});
   }
@@ -674,6 +803,23 @@ function dislikeArticle(catId, idx){
 }
 
 // ===== DETAIL PAGE =====
+// 記事URLからOGP画像を取得
+async function fetchOgpImage(url){
+  if(!url) return '';
+  try{
+    var html = await fetchWithProxy(url);
+    // og:image
+    var m = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i);
+    if(!m) m = html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+    if(m && m[1]) return m[1];
+    // twitter:image
+    var t = html.match(/<meta[^>]+name=["']twitter:image["'][^>]+content=["']([^"']+)["']/i);
+    if(!t) t = html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image["']/i);
+    if(t && t[1]) return t[1];
+  }catch(e){}
+  return '';
+}
+
 async function openDetail(catId, idx){
   var cat = CATS[catId];
   var article = cache[catId] && cache[catId].articles && cache[catId].articles[idx];
@@ -681,10 +827,56 @@ async function openDetail(catId, idx){
   document.getElementById('detailTag').textContent = article.tag || cat.label;
   document.getElementById('detailTag').className = 'detail-tag ' + (cat.tagClass||'tag-custom');
   document.getElementById('detailTitle').textContent = article.title;
+  // キャッチ画像セット（RSSにあればそれを使い、なければOGP取得）
+  var existHero = document.getElementById('detailHero');
+  if(existHero) existHero.remove();
+  var imgUrl = article.image || '';
+  // OGP取得済みならキャッシュから使う
+  if(!imgUrl && article.detail && article.detail.ogpImage) imgUrl = article.detail.ogpImage;
+  function insertHeroImg(src){
+    if(!src) return;
+    var heroWrap = document.createElement('div');
+    heroWrap.id = 'detailHero';
+    heroWrap.className = 'detail-hero-wrap';
+    var heroImg = document.createElement('img');
+    heroImg.src = src;
+    heroImg.className = 'detail-hero';
+    heroImg.alt = article.title;
+    heroImg.onerror = function(){ heroWrap.remove(); };
+    heroWrap.appendChild(heroImg);
+    var titleEl = document.getElementById('detailTitle');
+    titleEl.parentNode.insertBefore(heroWrap, titleEl);
+  }
+  if(imgUrl){
+    insertHeroImg(imgUrl);
+  } else if(article.link){
+    // バックグラウンドでOGP取得
+    fetchOgpImage(article.link).then(function(ogp){
+      if(ogp){
+        insertHeroImg(ogp);
+        // キャッシュに保存
+        if(cache[catId] && cache[catId].articles && cache[catId].articles[idx]){
+          if(!cache[catId].articles[idx].detail) cache[catId].articles[idx].detail = {};
+          cache[catId].articles[idx].detail.ogpImage = ogp;
+          cache[catId].articles[idx].image = ogp;
+          saveCache();
+        }
+      }
+    });
+  }
   var footer = document.getElementById('detailFooter');
   var srcBtn = document.getElementById('detailSourceBtn');
-  if(article.link){ srcBtn.href=article.link; footer.style.display='block'; }
+  footer.dataset.catId = catId;
+  footer.dataset.idx = idx;
+  if(article.link){ srcBtn.href=article.link; footer.style.display='flex'; }
   else footer.style.display='none';
+  // ボタン状態リセット
+  var lb = document.getElementById('detailLikeBtn');
+  var db = document.getElementById('detailDislikeBtn');
+  var liked = prefs.likes[article.title] > 0;
+  var disliked = prefs.dislikes[article.title] > 0;
+  if(lb) lb.className = 'btn-detail-pref btn-detail-like' + (liked ? ' active' : '');
+  if(db) db.className = 'btn-detail-pref btn-detail-dislike' + (disliked ? ' active' : '');
   var page = document.getElementById('detailPage');
   page.classList.add('open');
   page.scrollTop = 0;
@@ -694,11 +886,11 @@ async function openDetail(catId, idx){
   if(article.detail && article.detail.body){ renderDetail(bodyEl, article.detail); return; }
   bodyEl.innerHTML = '<div class="detail-loading"><div class="detail-bar-wrap"><div class="detail-bar"></div></div><div class="detail-loading-text">AI が要約を作成中...</div></div>';
   try{
-    var prompt = 'タイトル: ' + article.title + '\n概要: ' + (article.summary||'') + '\n\n以下の形式で返してください。\n\n【内容】この記事を結論から1文（40字以内）で説明\n【対象】この記事が役立つ人を1文（30字以内）で説明\n【解説】以下のルールで600字程度の解説を書いてください:\n- 最初に結論・要点を書く\n- 3つの段落に分ける（段落と段落の間は空行1行）\n- 1段落は4〜5文以内\n- 短い文を心がける（1文は60字以内）\n- マークダウン・JSON・箇条書き・見出し不要\n- 自然な日本語で';
-    var raw = await gemini(prompt, 1500);
+    var prompt = 'タイトル: ' + article.title + '\n概要: ' + (article.summary||'') + '\n\nあなたは「難しいニュースをわかりやすく伝える解説者」です。\n専門用語や難しい言葉は、中学生でもわかる言葉に言い換えてください。\n例：「金融緩和」→「お金を借りやすくする政策」\n例：「地政学的リスク」→「国と国の関係が原因で起きる危険」\n\n下記フォーマットを厳守して出力してください。【】の見出しはそのまま出力すること。\n\n【内容】\n（結論を1文・40字以内・難しい言葉は使わない）\n\n【対象】\n（この記事が役立つ具体的な人物像・100字以内）\n\n【解説】\n（第1段落: 「つまり何が起きたのか」。自然につながる3〜4文の流れるような文章で。難しい言葉は言い換えるか()で補足。）\n\n（第2段落: 「なぜそうなったのか・背景」。自然につながる3〜4文で。例え話や身近な例を交えて。）\n\n（第3段落: 「これからどうなるか・私たちへの影響」。自然につながる3〜4文で。）\n\n【重要】\n- 各段落は、文と文がなめらかにつながる「普通の文章」として書く\n- 1文ずつ改行して箇条書きのようにしない\n- 段落内は句読点でつなぎ、読んでいて息継ぎできるリズムにする\n- 1文は長くなりすぎず、60字以内を目安に\n- マークダウン・箇条書き・太字・見出し不要\n- （）の指示文は出力しない。実際の内容のみ出力する';
+    var raw = await gemini(prompt, 2000);
     var whatM = raw.match(/【内容】([\s\S]*?)(?=【対象】|$)/);
     var whoM  = raw.match(/【対象】([\s\S]*?)(?=【解説】|$)/);
-    var bodyM = raw.match(/【解説】([\s\S]*?)$/);
+    var bodyM = raw.match(/【解説】([\s\S]*?)(?=【重要】|$)/);
     var d = {
       what: whatM ? whatM[1].trim() : '',
       who:  whoM  ? whoM[1].trim()  : '',
@@ -717,243 +909,14 @@ function renderDetail(bodyEl, d){
   h += '<div class="detail-intro-row"><span class="detail-intro-label">📌 内容</span><span class="detail-intro-val">' + (d.what||'') + '</span></div>';
   h += '<div class="detail-intro-row"><span class="detail-intro-label">👤 対象</span><span class="detail-intro-val">' + (d.who||'') + '</span></div>';
   h += '</div>';
-  var bodyText = (d.body||'').replace(/\n{3,}/g, '\n\n');
-  var paras = bodyText.split(/\n\n+/).map(function(p){ return p.replace(/\n/g,' ').trim(); }).filter(function(p){ return p.length > 0; });
+  var bodyText = (d.body||'').replace(/\n{3,}/g, '\n\n').trim();
+  var paras = bodyText.split(/\n\n+/).map(function(p){
+    return p.trim().replace(/\n/g, '<br>');
+  }).filter(function(p){ return p.length > 0; });
   h += '<div class="detail-content">' + paras.map(function(p){ return '<p>' + p + '</p>'; }).join('') + '</div>';
   bodyEl.innerHTML = h;
 }
 
-function closeDetail(){
-  document.getElementById('detailPage').classList.remove('open');
-  document.body.style.overflow = '';
-}
-window.addEventListener('popstate', function(){
-  if(document.getElementById('detailPage').classList.contains('open')){ closeDetail(); }
-});
-
-// ===== DIGEST TAB =====
-async function buildDigest(){
-  if(!getKey()){ openSettings(); return; }
-  var btn = document.getElementById('btn-__digest__');
-  var box = document.getElementById('art-__digest__');
-  if(btn){ btn.disabled=true; btn.innerHTML='<div class="spinner"></div> 生成中'; }
-  box.innerHTML = '<div class="loading-state"><div class="loading-bar-wrap"><div class="loading-bar"></div></div><div class="loading-text">全記事を分析中...</div></div>';
-  var allArticles = [];
-  Object.keys(CATS).forEach(function(catId){
-    if(cache[catId] && cache[catId].articles){
-      cache[catId].articles.forEach(function(a){
-        allArticles.push({title:a.title, summary:a.summary, tag:a.tag, link:a.link, catId:catId, catLabel:CATS[catId].label});
-      });
-    }
-  });
-  if(!allArticles.length){
-    box.innerHTML = '<div class="error-box">⚠️ 先に各カテゴリの記事を取得してください</div>';
-    if(btn){ btn.disabled=false; btn.innerHTML='生成'; }
-    return;
-  }
-  var today = new Date().toLocaleDateString('ja-JP');
-  var articleList = allArticles.map(function(a,i){ return '['+i+'] ['+a.catLabel+'] '+a.title+' - '+(a.summary||''); }).join('\n');
-  var prefStr = getPrefsPrompt();
-  var prompt = '今日（' + today + '）の全カテゴリのニュース一覧です。\n' + articleList + '\n\n以下の2つのセクションをJSON形式のみで返してください。説明文・マークダウン不要。{から始まり}で終わること。\n\n{\n  "hot": [\n    {"index": 記事番号, "title": "タイトル", "reason": "世間的に重要な理由を30字で", "summary": "50字要約"}\n  ],\n  "personal": [\n    {"index": 記事番号, "title": "タイトル", "reason": "あなた向けの理由を30字で", "summary": "50字要約"}\n  ]\n}\n\nhot: 世間的な注目度が高い記事を3件\npersonal: ユーザーの好みに合った記事を3件' + prefStr + '\nindexは上記[0][1]...の番号。';
-  try{
-    var raw = await gemini(prompt, 4000);
-    var s = raw.indexOf('{'), e = raw.lastIndexOf('}');
-    if(s===-1||e===-1) throw new Error('JSONパース失敗');
-    var d = JSON.parse(raw.slice(s, e+1));
-    var h = '';
-    h += renderDigestSection(d.hot, allArticles, '🔥 ホットニュース', true);
-    h += renderDigestSection(d.personal, allArticles, '🎯 あなた向け', false);
-    box.innerHTML = h;
-    var upd = document.getElementById('upd-__digest__');
-    if(upd) upd.textContent = '生成: ' + new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
-  }catch(err){
-    box.innerHTML = '<div class="error-box">⚠️ ' + err.message + '</div>';
-  }finally{
-    if(btn){ btn.disabled=false; btn.innerHTML='再生成'; }
-  }
-}
-
-function renderDigestSection(items, allArticles, label, isHot){
-  if(!items || !items.length) return '';
-  var h = '<div class="digest-section' + (isHot ? ' digest-section-hot' : '') + '">';
-  h += '<div class="digest-section-title">' + label + '</div>';
-  items.forEach(function(item){
-    var a = allArticles[item.index];
-    if(!a) return;
-    var cat = CATS[a.catId];
-    var artIdx = 0;
-    if(cache[a.catId] && cache[a.catId].articles){
-      for(var i=0; i<cache[a.catId].articles.length; i++){
-        if(cache[a.catId].articles[i].title === a.title){ artIdx=i; break; }
-      }
-    }
-    h += '<div class="digest-card">';
-    h += '<div class="digest-reason">' + (item.reason||'') + '</div>';
-    h += '<div class="digest-title" onclick="openDetail(\'' + a.catId + '\',' + artIdx + ')">' + (item.title||a.title||'') + '</div>';
-    h += '<div class="digest-summary">' + (item.summary||a.summary||'') + '</div>';
-    h += '<div class="digest-actions">';
-    h += '<button class="btn-ai-summary" style="flex:none;padding:7px 14px;font-size:0.75rem" onclick="openDetail(\'' + a.catId + '\',' + artIdx + ')">🤖 AI要約</button>';
-    if(a.link) h += '<a class="btn-source" href="' + a.link + '" target="_blank">↗ 元記事</a>';
-    h += '</div></div>';
-  });
-  h += '</div>';
-  return h;
-}
-
-// ===== CATEGORY MANAGER =====
-function openCatManager(){ renderCatList(); document.getElementById('catManagerOverlay').classList.add('open'); }
-function closeCatManager(){ document.getElementById('catManagerOverlay').classList.remove('open'); }
-function renderCatList(){
-  var el = document.getElementById('catList');
-  var h = '';
-  Object.keys(CATS).forEach(function(id){
-    var cat = CATS[id];
-    h += '<div class="cat-item">';
-    h += '<div class="cat-item-icon">' + cat.icon + '</div>';
-    h += '<div class="cat-item-name">' + cat.label + '</div>';
-    h += '<div class="cat-item-count">' + (cat.feeds||[]).length + ' feed</div>';
-    h += '<button class="btn-cat-settings" onclick="openEditCat(\'' + id + '\');closeCatManager()">＋ 参照記事サイトを追加</button>';
-    h += '<button class="btn-cat-del" onclick="deleteCat(\'' + id + '\')">✕</button>';
-    h += '</div>';
-  });
-  el.innerHTML = h;
-}
-function deleteCat(catId){
-  var cat = CATS[catId];
-  if(!cat || !confirm('「' + cat.label + '」を削除しますか？')) return;
-  delete CATS[catId]; delete cache[catId];
-  saveCats(); saveCache();
-  if(currentCat===catId) currentCat = Object.keys(CATS)[0]||'';
-  buildUI(); renderAllCached();
-  renderCatList();
-}
-function openAddCat(){
-  editingCatId = null;
-  document.getElementById('catEditTitle').textContent = '＋ カテゴリを追加';
-  document.getElementById('catNameInput').value = '';
-  document.getElementById('catIconInput').value = '';
-  renderRssList([]);
-  closeCatManager();
-  document.getElementById('catEditOverlay').classList.add('open');
-}
-function openEditCat(catId){
-  editingCatId = catId;
-  var cat = CATS[catId];
-  document.getElementById('catEditTitle').textContent = '✏ RSS設定: ' + cat.label;
-  document.getElementById('catNameInput').value = cat.label;
-  document.getElementById('catIconInput').value = cat.icon;
-  renderRssList(cat.feeds||[]);
-  document.getElementById('catEditOverlay').classList.add('open');
-}
-function closeCatEdit(){ document.getElementById('catEditOverlay').classList.remove('open'); }
-function renderRssList(feeds){
-  var h = '';
-  feeds.forEach(function(url, i){
-    h += '<div class="rss-item" id="rss-row-' + i + '">';
-    h += '<input class="form-input rss-url-input" value="' + url.replace(/"/g,'&quot;') + '" placeholder="https://..." style="flex:1;font-size:0.72rem;padding:6px 10px;">';
-    h += '<button class="btn-rss-detect" onclick="detectRss(this)" title="RSS自動検出">🔍</button>';
-    h += '<button class="btn-rss-del" onclick="this.parentElement.remove()">✕</button>';
-    h += '</div>';
-  });
-  document.getElementById('rssList').innerHTML = h;
-}
-function addRssRow(){
-  var list = document.getElementById('rssList');
-  var i = Date.now();
-  var div = document.createElement('div');
-  div.className = 'rss-item'; div.id = 'rss-row-' + i;
-  div.innerHTML = '<input class="form-input rss-url-input" placeholder="サイトURLかRSSのURLを貼り付け" style="flex:1;font-size:0.72rem;padding:6px 10px;"><button class="btn-rss-detect" onclick="detectRss(this)">🔍</button><button class="btn-rss-del" onclick="this.parentElement.remove()">✕</button>';
-  list.appendChild(div);
-  div.querySelector('input').addEventListener('keydown', function(e){
-    if(e.key==='Enter'){ e.preventDefault(); detectRss(div.querySelector('.btn-rss-detect')); }
-  });
-}
-function removeRssRow(i){ var el=document.getElementById('rss-row-'+i); if(el) el.remove(); }
-async function detectRss(btn){
-  var row = btn.closest('.rss-item');
-  var input = row.querySelector('.rss-url-input');
-  var url = input.value.trim();
-  if(!url) return;
-  if(/\/(rss|feed|atom|rdf)|\.xml|\.rss/.test(url)){ showBanner('✅ RSSとして設定しました'); return; }
-  btn.textContent='⏳'; btn.disabled=true;
-  try{
-    var text = await fetchWithProxy(url);
-    var matches = Array.from(text.matchAll(/<link[^>]+type="application\/(rss|atom)\+xml"[^>]*href="([^"]+)"/gi));
-    var matches2 = Array.from(text.matchAll(/<link[^>]+href="([^"]+)"[^>]+type="application\/(rss|atom)\+xml"/gi));
-    var rssUrl = null;
-    var allM = matches.concat(matches2);
-    for(var i=0; i<allM.length; i++){
-      var href = allM[i][2] || allM[i][1];
-      if(href && href.indexOf('http') === 0){ rssUrl = href; break; }
-    }
-    if(rssUrl && rssUrl.indexOf('http') !== 0){
-      var base = new URL(url);
-      rssUrl = new URL(rssUrl, base).href;
-    }
-    if(!rssUrl){
-      var base2 = new URL(url).origin;
-      var candidates = ['/rss','/feed','/rss.xml','/feed.xml','/atom.xml','/rss/index.xml'];
-      for(var ci=0; ci<candidates.length; ci++){
-        try{
-          var t = await fetchWithProxy(base2 + candidates[ci]);
-          if(t.indexOf('<rss')!==-1 || t.indexOf('<feed')!==-1 || t.indexOf('<rdf:')!==-1){ rssUrl = base2+candidates[ci]; break; }
-        }catch(e){}
-      }
-    }
-    if(rssUrl){ input.value=rssUrl; input.style.borderColor='var(--accent)'; showBanner('✅ RSS検出: '+rssUrl); }
-    else{ showBanner('⚠️ RSSが見つかりませんでした'); input.style.borderColor='var(--red)'; }
-  }catch(e){ showBanner('⚠️ サイトにアクセスできませんでした'); }
-  finally{ btn.textContent='🔍'; btn.disabled=false; }
-}
-function saveCatEdit(){
-  var name = document.getElementById('catNameInput').value.trim();
-  var icon = document.getElementById('catIconInput').value.trim() || '📰';
-  if(!name){ alert('カテゴリ名を入力してください'); return; }
-  var feeds = Array.from(document.querySelectorAll('.rss-url-input')).map(function(el){ return el.value.trim(); }).filter(Boolean);
-  if(!feeds.length){ alert('RSSフィードを1つ以上追加してください'); return; }
-  if(editingCatId){
-    CATS[editingCatId].label = name;
-    CATS[editingCatId].icon = icon;
-    CATS[editingCatId].feeds = feeds;
-  } else {
-    var newId = 'cat_' + Date.now();
-    CATS[newId] = {label:name, icon:icon, tagClass:'tag-custom', feeds:feeds};
-  }
-  saveCats();
-  currentCat = editingCatId || Object.keys(CATS).slice(-1)[0];
-  buildUI(); renderAllCached();
-  closeCatEdit();
-  showBanner('✅ 保存しました');
-}
-
-// ===== MISC =====
-function renderAllCached(){
-  Object.keys(CATS).forEach(function(id){
-    if(cache[id] && cache[id].articles){
-      renderArticles(id, cache[id].articles);
-      var upd = document.getElementById('upd-' + id);
-      if(upd && cache[id].updatedAt) upd.textContent = '更新: ' + new Date(cache[id].updatedAt).toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
-    }
-  });
-}
-function reqNotif(){
-  if('Notification' in window && Notification.permission==='default') Notification.requestPermission();
-}
-function showBanner(msg){
-  var el = document.getElementById('notifBanner');
-  el.textContent = msg; el.classList.add('show');
-  setTimeout(function(){ el.classList.remove('show'); }, 4000);
-}
-function openSettings(){ document.getElementById('apiKeyInput').value=getKey(); document.getElementById('settingsOverlay').classList.add('open'); }
-function closeSettings(){ document.getElementById('settingsOverlay').classList.remove('open'); }
-function saveSettings(){ setKey(document.getElementById('apiKeyInput').value.trim()); closeSettings(); reqNotif(); showBanner('✅ 設定を保存しました'); }
-
-// ===== INIT =====
-loadCats(); loadCache(); loadPrefs();
-buildUI(); renderAllCached();
-reqNotif();
-if(!getKey()) setTimeout(openSettings, 500);
-</script>
-
-
-</body></html>
+function detailLike(){
+  var footer = document.getElementById('detailFooter');
+  var catId = footer.dataset.catId, idx = parseInt(foote
