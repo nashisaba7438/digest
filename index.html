@@ -1007,13 +1007,15 @@ async function openDetail(catId, idx){
   document.getElementById('detailTag').textContent = article.tag || cat.label;
   document.getElementById('detailTag').className = 'detail-tag ' + (cat.tagClass||'tag-custom');
   document.getElementById('detailTitle').textContent = article.title;
-  // キャッチ画像セット（RSSにあればそれを使い、なければOGP取得）
+  // キャッチ画像セット
   var existHero = document.getElementById('detailHero');
   if(existHero) existHero.remove();
   var imgUrl = article.image || '';
-  // OGP取得済みならキャッシュから使う
   function insertHeroImg(src){
     if(!src) return;
+    // 既存があれば削除
+    var old = document.getElementById('detailHero');
+    if(old) old.remove();
     var heroWrap = document.createElement('div');
     heroWrap.id = 'detailHero';
     heroWrap.className = 'detail-hero-wrap';
@@ -1028,6 +1030,23 @@ async function openDetail(catId, idx){
   }
   if(imgUrl){
     insertHeroImg(imgUrl);
+  } else if(article.link){
+    // microlinkでOGP画像をバックグラウンド取得
+    (function(link, catId, idx){
+      fetch('https://api.microlink.io/?url=' + encodeURIComponent(link), {signal: AbortSignal.timeout(15000)})
+        .then(function(r){ return r.json(); })
+        .then(function(j){
+          var img = j.data && j.data.image && j.data.image.url;
+          if(!img) return;
+          insertHeroImg(img);
+          // キャッシュに保存
+          if(cache[catId] && cache[catId].articles && cache[catId].articles[idx]){
+            cache[catId].articles[idx].image = img;
+            saveCache();
+          }
+        })
+        .catch(function(){});
+    })(article.link, catId, idx);
   }
   var footer = document.getElementById('detailFooter');
   var srcBtn = document.getElementById('detailSourceBtn');
