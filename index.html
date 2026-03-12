@@ -478,10 +478,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 const DEFAULT_CATS = {
   game_4gamer:    {label:'ゲーム 4Gamer',    icon:'🎮', tagClass:'tag-game',  feeds:['https://www.4gamer.net/rss/index.xml']},
   game_gamewatch: {label:'ゲーム GameWatch', icon:'🕹', tagClass:'tag-game',  feeds:['https://game.watch.impress.co.jp/data/rss/1.0/gmw/feed.rdf']},
-  anime_gamewatch:{label:'アニメ',           icon:'📺', tagClass:'tag-anime', feeds:['https://news.google.com/rss/search?q=%E3%82%A2%E3%83%8B%E3%83%A1+%E6%96%B0%E3%82%A2%E3%83%8B%E3%83%A1+OR+%E5%A3%B0%E5%84%AA+OR+%E3%82%A2%E3%83%8B%E3%83%A1%E5%8C%96&hl=ja&gl=JP&ceid=JP:ja']},
-  ai:             {label:'AI最新情報',        icon:'🤖', tagClass:'tag-ai',    feeds:['https://news.google.com/rss/search?q=%E4%BA%BA%E5%B7%A5%E7%9F%A5%E8%83%BD+OR+%E7%94%9F%E6%88%90AI+OR+LLM+OR+ChatGPT+OR+Claude&hl=ja&gl=JP&ceid=JP:ja']},
-  geopolitics:    {label:'地政学',            icon:'🌍', tagClass:'tag-geo',   feeds:['https://news.google.com/rss/search?q=%E5%9C%B0%E6%94%BF%E5%AD%A6+OR+%E5%9B%BD%E9%9A%9B%E6%83%85%E5%8B%A2+OR+%E5%A4%96%E4%BA%A4+OR+%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C&hl=ja&gl=JP&ceid=JP:ja']},
-  finance:        {label:'金融情報',          icon:'💹', tagClass:'tag-fin',   feeds:['https://news.google.com/rss/search?q=%E6%A0%AA%E5%BC%8F+OR+%E7%82%BA%E6%9B%BF+OR+%E6%97%A5%E7%B5%8C+OR+FRB+OR+%E9%87%91%E8%9E%8D%E5%B8%82%E5%A0%B4&hl=ja&gl=JP&ceid=JP:ja']}
+  anime_gamewatch:{label:'アニメ',           icon:'📺', tagClass:'tag-anime', useSearch:true, searchQuery:'最新アニメ 新番組 OR 声優 OR アニメ化 今週'},
+  ai:             {label:'AI最新情報',        icon:'🤖', tagClass:'tag-ai',    useSearch:true, searchQuery:'生成AI OR LLM OR ChatGPT OR Claude 最新ニュース 今日'},
+  geopolitics:    {label:'地政学',            icon:'🌍', tagClass:'tag-geo',   useSearch:true, searchQuery:'地政学 OR 国際情勢 OR 外交 OR 安全保障 最新ニュース'},
+  finance:        {label:'金融情報',          icon:'💹', tagClass:'tag-fin',   useSearch:true, searchQuery:'株式 OR 為替 OR 日経平均 OR FRB 最新ニュース 今日'}
 };
 const SCHEDULE = ['06:00','12:00','16:00'];
 const PROXIES = [
@@ -822,6 +822,42 @@ function isCacheFresh(catId){
   return (Date.now() - new Date(c.updatedAt).getTime()) < 3*60*60*1000;
 }
 
+// ===== GEMINI GOOGLE SEARCH でニュース取得 =====
+async function fetchBySearch(cat){
+  var prefStr = getPrefsPrompt();
+  var today = new Date().toLocaleDateString('ja-JP');
+  var prompt = today + '現在の「' + cat.label + '」に関する最新ニュースを5件、以下のJSON形式のみで返せ。[から]で終わること。' + prefStr +
+    '\n[{"title":"記事タイトル","summary":"100〜200字で内容を具体的に","tag":"' + cat.label + '","importance":1-5,"link":"記事URL"}]' +
+    '\n各記事には必ず実際の記事URLを含めること。URLはhttps://で始まる実在するURLにすること。';
+  var url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=' + getKey();
+  var res = await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    signal: AbortSignal.timeout(40000),
+    body: JSON.stringify({
+      contents: [{parts: [{text: prompt}]}],
+      tools: [{googleSearch: {}}]
+    })
+  });
+  if(!res.ok) throw new Error('Gemini Search エラー: ' + res.status);
+  var j = await res.json();
+  var raw = j.candidates && j.candidates[0] && j.candidates[0].content && j.candidates[0].content.parts[0].text;
+  if(!raw) throw new Error('Gemini Search: レスポンスなし');
+  var s = raw.indexOf('['), e = raw.lastIndexOf(']');
+  if(s===-1||e===-1) throw new Error('JSONパース失敗: ' + raw.slice(0,80));
+  var arts = JSON.parse(raw.slice(s, e+1));
+  return arts.map(function(a){
+    return {
+      title: a.title||'',
+      summary: a.summary||'',
+      tag: a.tag||cat.label,
+      importance: a.importance||3,
+      link: a.link||'',
+      image: ''
+    };
+  });
+}
+
 async function fetchOne(catId, forceRefresh){
   if(!getKey()){ openSettings(); return; }
   var cat = CATS[catId];
@@ -837,55 +873,55 @@ async function fetchOne(catId, forceRefresh){
   if(btn){ btn.disabled = true; btn.innerHTML = '<div class="spinner"></div> 取得中'; }
   box.innerHTML = '<div class="loading-state"><div class="loading-bar-wrap"><div class="loading-bar"></div></div><div class="loading-text">RSS → AI要約中...</div></div>';
   try{
-    var allItems = [];
-    var feedResults = await Promise.all(cat.feeds.map(function(f){ return fetchRSS(f).catch(function(){return [];}); }));
-    // 各feedから均等にインターリーブ（偏り防止）
-    var maxLen = Math.max.apply(null, feedResults.map(function(r){ return r.length; }));
-    for(var fi=0; fi<maxLen; fi++){
-      feedResults.forEach(function(res){ if(res[fi]) allItems.push(res[fi]); });
+    var result;
+    if(cat.useSearch){
+      // Google Search grounding でニュース取得（Google News RSS不要）
+      result = await fetchBySearch(cat);
+    } else {
+      var allItems = [];
+      var feedResults = await Promise.all(cat.feeds.map(function(f){ return fetchRSS(f).catch(function(){return [];}); }));
+      var maxLen = Math.max.apply(null, feedResults.map(function(r){ return r.length; }));
+      for(var fi=0; fi<maxLen; fi++){
+        feedResults.forEach(function(res){ if(res[fi]) allItems.push(res[fi]); });
+      }
+      if(!allItems.length) throw new Error('記事が見つかりませんでした');
+      var seenTitles = [];
+      var items = allItems.filter(function(it){
+        var t = (it.title||'').trim();
+        var prefix = t.slice(0, 20);
+        var dup = seenTitles.some(function(s){ return s === t || s.slice(0,20) === prefix; });
+        if(dup) return false;
+        seenTitles.push(t);
+        return true;
+      }).slice(0, 15);
+      var headlines = items.map(function(it,i){ return '['+i+'] '+it.title; }).join('\n');
+      var prefStr = getPrefsPrompt();
+      var prompt = '「' + cat.label + '」ヘッドライン:\n' + headlines + '\n\n重要5件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。' + prefStr + '\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","tag":"' + cat.label + '","importance":1-5}]';
+      var raw = await gemini(prompt, 4000);
+      var s = raw.indexOf('['), e = raw.lastIndexOf(']');
+      if(s===-1||e===-1) throw new Error('JSONパース失敗: ' + raw.slice(0,80));
+      var arts = JSON.parse(raw.slice(s, e+1));
+      result = arts.map(function(a){
+        var atitle = (a.title||'').trim();
+        var matched = null;
+        for(var i=0; i<items.length; i++){
+          if(items[i].title.trim() === atitle){ matched=items[i]; break; }
+        }
+        if(!matched){
+          for(var i=0; i<items.length; i++){
+            var it = items[i].title.trim();
+            if(it.indexOf(atitle) !== -1 || atitle.indexOf(it) !== -1){ matched=items[i]; break; }
+          }
+        }
+        if(!matched){
+          var p10 = atitle.slice(0,10);
+          for(var i=0; i<items.length; i++){
+            if(items[i].title.indexOf(p10) !== -1){ matched=items[i]; break; }
+          }
+        }
+        return {title:a.title, summary:a.summary, tag:a.tag, importance:a.importance, link:matched?matched.link:'', image:matched?matched.image||'':''};
+      });
     }
-    if(!allItems.length) throw new Error('記事が見つかりませんでした');
-    // 重複除去：完全一致 + 先頭20文字類似
-    var seenTitles = [];
-    var items = allItems.filter(function(it){
-      var t = (it.title||'').trim();
-      var prefix = t.slice(0, 20);
-      var dup = seenTitles.some(function(s){ return s === t || s.slice(0,20) === prefix; });
-      if(dup) return false;
-      seenTitles.push(t);
-      return true;
-    }).slice(0, 15);
-    var headlines = items.map(function(it,i){ return '['+i+'] '+it.title; }).join('\n');
-    var today = new Date().toLocaleDateString('ja-JP');
-    var prefStr = getPrefsPrompt();
-    var prompt = '「' + cat.label + '」ヘッドライン:\n' + headlines + '\n\n重要5件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。' + prefStr + '\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","tag":"' + cat.label + '","importance":1-5}]';
-    var raw = await gemini(prompt, 4000);
-    var s = raw.indexOf('['), e = raw.lastIndexOf(']');
-    if(s===-1||e===-1) throw new Error('JSONパース失敗: ' + raw.slice(0,80));
-    var arts = JSON.parse(raw.slice(s, e+1));
-    var result = arts.map(function(a){
-      var atitle = (a.title||'').trim();
-      var matched = null;
-      // 1. 完全一致
-      for(var i=0; i<items.length; i++){
-        if(items[i].title.trim() === atitle){ matched=items[i]; break; }
-      }
-      // 2. どちらかが相手を含む
-      if(!matched){
-        for(var i=0; i<items.length; i++){
-          var it = items[i].title.trim();
-          if(it.indexOf(atitle) !== -1 || atitle.indexOf(it) !== -1){ matched=items[i]; break; }
-        }
-      }
-      // 3. 前10文字マッチ
-      if(!matched){
-        var p10 = atitle.slice(0,10);
-        for(var i=0; i<items.length; i++){
-          if(items[i].title.indexOf(p10) !== -1){ matched=items[i]; break; }
-        }
-      }
-      return {title:a.title, summary:a.summary, tag:a.tag, importance:a.importance, link:matched?matched.link:'', image:matched?matched.image||'':''};
-    });
     cache[catId] = {articles:result, updatedAt:new Date().toISOString()};
     saveCache();
     renderArticles(catId, result);
