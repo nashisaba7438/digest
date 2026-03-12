@@ -485,12 +485,9 @@ const DEFAULT_CATS = {
 };
 const SCHEDULE = ['06:00','12:00','16:00'];
 const PROXIES = [
-  // rss2jsonはJSONで返す（専用フラグ付き）
-  {fn: function(u){ return 'https://api.rss2json.com/v1/api.json?rss_url=' + encodeURIComponent(u); }, json: true},
-  // allorigins（タイムアウト長め）
-  {fn: function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); }, json: false},
-  // alloriginsのgetバージョン（contentsフィールド）
-  {fn: function(u){ return 'https://api.allorigins.win/get?url=' + encodeURIComponent(u); }, json: 'allorigins'},
+  function(u){ return 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u); },
+  function(u){ return 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u); },
+  function(u){ return 'https://api.allorigins.win/get?url=' + encodeURIComponent(u); },
 ];
 const ONE_MONTH = 30*24*60*60*1000;
 
@@ -702,32 +699,17 @@ function switchTab(btn){
 // ===== RSS PROXY =====
 async function fetchWithProxy(url){
   for(var i=0; i<PROXIES.length; i++){
-    var proxy = PROXIES[i];
     try{
-      var timeout = (proxy.json === false || proxy.json === 'allorigins') ? 15000 : 10000;
-      var res = await fetch(proxy.fn(url), {signal: AbortSignal.timeout(timeout)});
+      var res = await fetch(PROXIES[i](url), {signal: AbortSignal.timeout(8000)});
       if(!res.ok) continue;
       var text = await res.text();
-      if(!text || text.length < 50) continue;
-      // rss2json: JSONからXML相当を組み立てる
-      if(proxy.json === true){
-        try{
-          var j = JSON.parse(text);
-          if(j.status !== 'ok' || !j.items || !j.items.length) continue;
-          // itemsをRSSっぽいテキストに変換してparseRSSに渡せる形へ返す
-          return '__RSS2JSON__' + text;
-        }catch(e){ continue; }
-      }
-      // allorigins/get: {"contents":"...xml..."}
-      if(proxy.json === 'allorigins'){
-        try{
-          var j2 = JSON.parse(text);
-          if(j2.contents && j2.contents.length > 100) return j2.contents;
-        }catch(e){ continue; }
+      if(!text || text.length < 100) continue;
+      // allorigins/get は {"contents":"xml"} 形式
+      if(text.trim().startsWith('{"contents"')){
+        try{ var j=JSON.parse(text); if(j.contents && j.contents.length > 100) return j.contents; }catch(e){}
         continue;
       }
-      // 通常のXMLテキスト
-      if(text && text.length > 100) return text;
+      return text;
     }catch(e){ continue; }
   }
   throw new Error('RSSの取得に失敗しました');
@@ -735,23 +717,6 @@ async function fetchWithProxy(url){
 
 async function fetchRSS(url){
   var text = await fetchWithProxy(url);
-  // rss2jsonのJSONレスポンスを処理
-  if(text && text.startsWith('__RSS2JSON__')){
-    try{
-      var j = JSON.parse(text.slice(12));
-      var cutoff = Date.now() - ONE_MONTH;
-      return j.items.filter(function(it){
-        if(it.pubDate){ var d=new Date(it.pubDate); if(!isNaN(d)&&d.getTime()<cutoff) return false; }
-        return !!it.title;
-      }).map(function(it){
-        return {
-          title: (it.title||'').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'"),
-          link: it.link || it.guid || '',
-          image: it.thumbnail || it.enclosure && it.enclosure.link || ''
-        };
-      }).slice(0,15);
-    }catch(e){ return []; }
-  }
   // XMLじゃないレスポンス（404 HTMLなど）は弾く
   if(!text || text.trim().indexOf('<') !== 0 || (text.indexOf('<channel') === -1 && text.indexOf('<feed') === -1)){
     return [];
