@@ -514,7 +514,7 @@ async function fetchBySearch(cat){
   var raw = await gemini(prompt, 4000, true);
   var s=raw.indexOf('['), e=raw.lastIndexOf(']');
   if(s===-1||e===-1) throw new Error('JSONパース失敗');
-  var arts=JSON.parse(raw.slice(s,e+1));
+  var arts=parseJson(raw.slice(s,e+1));
   return arts.filter(function(a){return a.title;}).map(function(a){
     return {title:a.title||'', summary:a.summary||'', tag:a.tag||cat.label, importance:a.importance||3, link:a.link||'', image:''};
   });
@@ -570,7 +570,7 @@ async function fetchOne(catId, forceRefresh){
       var raw=await gemini(prompt,4000);
       var sv=raw.indexOf('['),ev=raw.lastIndexOf(']');
       if(sv===-1||ev===-1) throw new Error('JSONパース失敗: '+raw.slice(0,80));
-      var arts=JSON.parse(raw.slice(sv,ev+1));
+      var arts=parseJson(raw.slice(sv,ev+1));
       result=arts.map(function(a){
         var atitle=(a.title||'').trim(); var matched=null;
         for(var i=0;i<items.length;i++) if(items[i].title.trim()===atitle){matched=items[i];break;}
@@ -781,7 +781,7 @@ async function generateDetail(catId,idx,article){
     var raw=await gemini(prompt,3000);
     var s=raw.indexOf('{'),e=raw.lastIndexOf('}');
     if(s===-1||e===-1) throw new Error('parse fail');
-    var detail=JSON.parse(raw.slice(s,e+1));
+    var detail=parseJson(raw.slice(s,e+1));
     if(cache[catId]&&cache[catId].articles&&cache[catId].articles[idx]){
       cache[catId].articles[idx].detail=detail;
       saveCache();
@@ -1113,6 +1113,11 @@ function showToast(msg,duration){
 // ===== UTILS =====
 function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function escAttr(s){ return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
+// トレイリングカンマを除去してJSONパース
+function parseJson(str){
+  var clean = str.replace(/,\s*([}\]])/g,'$1');
+  return JSON.parse(clean);
+}
 
 // ===== INIT =====
 function init(){
