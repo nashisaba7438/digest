@@ -284,7 +284,18 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="modal-body">
       <div class="cat-list" id="catList"></div>
       <div class="divider"></div>
-      <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em">カテゴリを追加</div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em">既存カテゴリにRSSを追加</div>
+      <div class="form-group">
+        <label class="form-label">カテゴリ</label>
+        <select class="form-input" id="addFeedCatId"></select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">RSS URL</label>
+        <input class="form-input" id="addFeedUrl" placeholder="https://example.com/rss.xml">
+      </div>
+      <button class="btn-primary" style="margin-bottom:16px" onclick="addFeedToCat()">このカテゴリにRSSを追加</button>
+      <div class="divider"></div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--muted);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.05em">新規カテゴリを追加</div>
       <div class="form-group">
         <label class="form-label">ラベル名</label>
         <input class="form-input" id="newCatLabel" placeholder="例: テック系">
@@ -298,7 +309,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
         <input class="form-input" id="newCatRss" placeholder="https://example.com/rss.xml">
         <div class="form-hint">空欄の場合はGemini Google Searchでニュースを取得します。</div>
       </div>
-      <button class="btn-primary" onclick="addCat()">追加</button>
+      <button class="btn-primary" onclick="addCat()">新規カテゴリを追加</button>
     </div>
   </div>
 </div>
@@ -709,9 +720,11 @@ function react(catId, idx, type){
   var a=arts[idx]; if(!a) return;
   if(type==='like'){
     addPref('like',a.title,a.tag);
+    addSeen([a.title]); // 👍した記事は既読扱いで次回除外
     showToast('👍 いいね！');
   } else if(type==='dislike'){
     addPref('dislike',a.title,a.tag);
+    addSeen([a.title]); // 👎した記事も次回除外
     showToast('👎 バッド');
   } else if(type==='save'){
     toggleSave(a);
@@ -922,7 +935,7 @@ function buildSections(){
       '<span class="cat-icon">'+cat.icon+'</span>'+
       '<span class="cat-title">'+escHtml(cat.label)+'</span>'+
       '<span class="cat-updated" id="upd-'+id+'"></span>'+
-      (!cat.fixed?'<button class="btn-add-feed" onclick="openCatModal()">＋ feed追加</button>':'')+
+      '<button class="btn-add-feed" onclick="openCatModal()">＋ サイト追加</button>'+
       '<button class="btn-refetch" id="btn-'+id+'" onclick="fetchOne(\''+id+'\',true)">再取得</button>'+
       '</div>'+
       '<div id="art-'+id+'"><div class="empty-box">再取得ボタンで記事を取得できます</div></div>'+
@@ -1034,6 +1047,13 @@ function switchSettingsTab(idx,el){
 // ===== CAT MODAL =====
 function openCatModal(){
   renderCatList();
+  // 既存カテゴリのセレクトボックスを更新
+  var sel = document.getElementById('addFeedCatId');
+  if(sel){
+    sel.innerHTML = Object.keys(CATS).map(function(id){
+      return '<option value="'+escAttr(id)+'">'+escHtml(CATS[id].icon+' '+CATS[id].label)+'</option>';
+    }).join('');
+  }
   document.getElementById('catModal').classList.add('open');
 }
 function closeCatModal(){ document.getElementById('catModal').classList.remove('open'); }
@@ -1051,6 +1071,21 @@ function renderCatList(){
       '</div>';
   });
   document.getElementById('catList').innerHTML=html||'<div style="color:var(--muted);font-size:0.8rem">カテゴリがありません</div>';
+}
+
+function addFeedToCat(){
+  var catId = document.getElementById('addFeedCatId').value;
+  var url = document.getElementById('addFeedUrl').value.trim();
+  if(!catId || !url){ showToast('カテゴリとURLを入力してください'); return; }
+  var cat = CATS[catId]; if(!cat) return;
+  if(!cat.feeds) cat.feeds = [];
+  if(cat.feeds.includes(url)){ showToast('このURLは既に登録されています'); return; }
+  cat.feeds.push(url);
+  cat.useSearch = false; // RSS優先に切り替え
+  saveCats();
+  document.getElementById('addFeedUrl').value = '';
+  buildTabs(); buildSections();
+  showToast('✓ RSSを追加しました');
 }
 
 function addCat(){
