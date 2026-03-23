@@ -1117,26 +1117,12 @@ function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&l
 function escAttr(s){ return String(s||'').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); }
 // トレイリングカンマを除去してJSONパース
 function parseJson(str){
-  // トレイリングカンマ除去
   var clean = str.replace(/,\s*([}\]])/g,'$1');
-  // 不正文字除去
-  clean = clean.replace(/[\x00-\x08\x0b\x0c\x0e-\x1f]/g,'');
-  // 制御文字除去（改行・タブ以外）
-  clean = clean.replace(/[ -
--]/g,'');
-  try{
-    return JSON.parse(clean);
-  }catch(e){
-    // [ ] の範囲を再抽出して再試行
-    var s=clean.indexOf('['), en=clean.lastIndexOf(']');
-    if(s!==-1&&en!==-1&&en>s){
-      try{ return JSON.parse(clean.slice(s,en+1)); }catch(e2){}
-    }
-    // { } の範囲を再抽出して再試行
-    var s2=clean.indexOf('{'), en2=clean.lastIndexOf('}');
-    if(s2!==-1&&en2!==-1&&en2>s2){
-      try{ return JSON.parse('['+clean.slice(s2,en2+1)+']'); }catch(e3){}
-    }
+  try{ return JSON.parse(clean); }catch(e){
+    var s=clean.indexOf('['),en=clean.lastIndexOf(']');
+    if(s!==-1&&en!==-1&&en>s){ try{ return JSON.parse(clean.slice(s,en+1)); }catch(e2){} }
+    var s2=clean.indexOf('{'),en2=clean.lastIndexOf('}');
+    if(s2!==-1&&en2!==-1&&en2>s2){ try{ return JSON.parse('['+clean.slice(s2,en2+1)+']'); }catch(e3){} }
     throw new Error('JSONパース失敗: '+e.message);
   }
 }
