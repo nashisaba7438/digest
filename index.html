@@ -324,7 +324,7 @@ const DEFAULT_CATS = {
   anime:        {label:'アニメ',          icon:'📺', tagClass:'tag-anime', useSearch:true, searchQuery:'最新アニメ 新番組 OR 声優 OR アニメ化', fixed:true},
   ai:           {label:'AI最新情報',      icon:'🤖', tagClass:'tag-ai',    useSearch:true, searchQuery:'生成AI OR LLM OR ChatGPT 最新ニュース', fixed:true},
   geopolitics:  {label:'地政学',          icon:'🌍', tagClass:'tag-geo',   useSearch:true, searchQuery:'地政学 OR 国際情勢 OR 外交 最新', fixed:true},
-  finance:      {label:'金融情報',        icon:'💹', tagClass:'tag-fin',   useSearch:true, searchQuery:'株式 OR 為替 OR 日経平均 最新', fixed:true},
+  finance:      {label:'金融情報',        icon:'💹', tagClass:'tag-fin',   useSearch:true, searchQuery:'日本株 OR 為替相場 OR 日経平均 OR FRB OR 金融市場 最新動向', fixed:true},
 };
 
 // ===== STATE =====
@@ -397,7 +397,8 @@ function addSeen(titles){
 
 function isSeenTitle(title){
   var t = (title||'').trim();
-  return seen.some(function(s){ return s === t; });
+  var p = t.slice(0,20);
+  return seen.some(function(s){ return s === t || (p.length >= 10 && s.slice(0,20) === p); });
 }
 
 // タイトルが似ているか（先頭15文字一致）
@@ -506,9 +507,10 @@ async function gemini(prompt, maxTokens, useSearch){
 // ===== FETCH BY SEARCH (Google grounding) =====
 async function fetchBySearch(cat){
   var prefStr = getPrefsPrompt();
-  var seenStr = seen.slice(-100).join('、').slice(0,300);
+  var seenStr = seen.slice(-50).map(function(s){return s.slice(0,25);}).join('、').slice(0,400);
   var today = new Date().toLocaleDateString('ja-JP');
-  var prompt = today + '時点の「' + cat.label + '」に関する最新ニュース5件を以下のJSON形式のみで返せ。前後の文章不要。[から]で終わること。' + prefStr +
+  var catConstraint = cat.isHot ? '' : '「'+cat.label+'」のカテゴリに完全に合致する記事のみ選ぶこと。無関係なジャンルは含めないこと。';
+  var prompt = today + '時点の「' + cat.label + '」に関する最新ニュース5件を以下のJSON形式のみで返せ。前後の文章不要。[から]で終わること。' + catConstraint + prefStr +
     (seenStr ? '\n以下は既に表示済みなので除外: ' + seenStr : '') +
     '\n[{"title":"記事タイトル","summary":"100〜200字で内容を具体的に","tag":"' + cat.label + '","importance":1〜5の数値,"link":"https://で始まる実在する記事URL"}]';
   var raw = await gemini(prompt, 4000, true);
