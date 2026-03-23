@@ -509,15 +509,34 @@ async function fetchBySearch(cat){
   var prefStr = getPrefsPrompt();
   var seenStr = seen.slice(-50).map(function(s){return s.slice(0,25);}).join('、').slice(0,400);
   var today = new Date().toLocaleDateString('ja-JP');
-  var catConstraint = cat.isHot ? '' : '「'+cat.label+'」のカテゴリに完全に合致する記事のみ選ぶこと。無関係なジャンルは含めないこと。';
-  var prompt = today + '時点の「' + cat.label + '」に関する最新ニュース5件を以下のJSON形式のみで返せ。前後の文章不要。[から]で終わること。' + catConstraint + prefStr +
-    (seenStr ? '\n以下は既に表示済みなので除外: ' + seenStr : '') +
-    '\n[{"title":"記事タイトル","summary":"100〜200字で内容を具体的に","tag":"' + cat.label + '","importance":1〜5の数値,"link":"https://で始まる実在する記事URL"}]';
+  // カテゴリ別の具体的な制約
+  var catDef = {
+    'ホットニュース': '今日の日本国内で話題のニュース（政治・社会・エンタメ・スポーツ等）',
+    'AI最新情報': '生成AI・LLM・機械学習・AIサービスに関するニュース。ゲームや金融の記事は除外',
+    '金融情報': '株式市場・為替・日経平均・FRB金利・経済指標・企業決算など純粋な金融・経済ニュース。AI・ゲーム・エンタメは除外',
+    'アニメ': '日本のアニメ・声優・マンガ原作のアニメ化に関するニュース。ゲームは除外',
+    '地政学': '国際情勢・外交・安全保障・地政学リスクに関するニュース',
+  };
+  var constraint = catDef[cat.label] || cat.label + 'に直接関係するニュースのみ';
+  var prompt = '【指示】' + today + '時点の最新ニュースから、以下のカテゴリに厳密に合致する記事を5件選んでJSONのみで返せ。[から]で終わること。' +
+    '【カテゴリ定義】' + constraint +
+    '【重要】タイトルが似ている記事は1件のみ。同じ企業・トピックは重複させないこと。' +
+    prefStr +
+    (seenStr ? '【除外】既出なので選ばないこと: ' + seenStr : '') +
+    '[{"title":"記事タイトル","summary":"100〜200字","tag":"' + cat.label + '","importance":3,"link":"https://実在する記事URL"}]';
   var raw = await gemini(prompt, 4000, true);
   var s=raw.indexOf('['), e=raw.lastIndexOf(']');
   if(s===-1||e===-1) throw new Error('JSONパース失敗');
   var arts=parseJson(raw.slice(s,e+1));
-  return arts.filter(function(a){return a.title;}).map(function(a){
+  // タイトル重複をさらにフィルタ
+  var seenT=[];
+  return arts.filter(function(a){
+    if(!a.title) return false;
+    var p=a.title.slice(0,20);
+    if(seenT.some(function(s){return s===p;})) return false;
+    seenT.push(p);
+    return true;
+  }).map(function(a){
     return {title:a.title||'', summary:a.summary||'', tag:a.tag||cat.label, importance:a.importance||3, link:a.link||'', image:''};
   });
 }
