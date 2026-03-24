@@ -541,38 +541,43 @@ async function fetchBySiteSearch(siteUrl){
   }catch(e){ return sourceUrls.map(function(u){return {title:u,link:u,image:''};}).slice(0,10); }
 }
 
-// RSSがあるか自動検出して取得（高速化：RSS判定をキャッシュ）
-var siteRssCache = {}; // {url: 'rss_url' or 'search'}
+// RSS → Google News RSS → 失敗 の順でフォールバック
+var siteRssCache = {}; // {url: 'rss_url' or 'failed'}
+
+function toGoogleNewsRss(siteUrl){
+  try{
+    var hostname = new URL(siteUrl).hostname;
+    return 'https://news.google.com/rss/search?q=site:' + hostname + '&hl=ja&gl=JP&ceid=JP:ja';
+  }catch(e){ return null; }
+}
 
 async function fetchSite(siteUrl){
-  // キャッシュ済みならそのまま使う
-  if(siteRssCache[siteUrl] === 'search'){
-    var items=await fetchBySiteSearch(siteUrl);
-    return {items:items, method:'search'};
+  // キャッシュ済みで失敗確定
+  if(siteRssCache[siteUrl] === 'failed'){
+    return {items:[], method:'failed', url:siteUrl};
   }
-  if(siteRssCache[siteUrl] && siteRssCache[siteUrl] !== 'search'){
+  // キャッシュ済みのRSS URL
+  if(siteRssCache[siteUrl] && siteRssCache[siteUrl] !== 'failed'){
     try{
       var items=await fetchRSS(siteRssCache[siteUrl]);
       if(items.length>0) return {items:items, method:'rss'};
     }catch(e){}
-    // キャッシュのRSSが失敗したらsearchに切り替え
-    siteRssCache[siteUrl]='search';
-    var items=await fetchBySiteSearch(siteUrl);
-    return {items:items, method:'search'};
+    siteRssCache[siteUrl]='failed';
+    return {items:[], method:'failed', url:siteUrl};
   }
 
-  // 初回：URLがrss/feed/xmlっぽければそのまま試す
+  // URLがrss/feed/xmlっぽければそのまま試す
   if(/rss|feed|atom|xml/i.test(siteUrl)){
     try{
       var items=await fetchRSS(siteUrl);
       if(items.length>0){ siteRssCache[siteUrl]=siteUrl; return {items:items, method:'rss'}; }
     }catch(e){}
-    siteRssCache[siteUrl]='search';
-    var items=await fetchBySiteSearch(siteUrl);
-    return {items:items, method:'search'};
+    // RSS URL指定なのに取れない → 失敗
+    siteRssCache[siteUrl]='failed';
+    return {items:[], method:'failed', url:siteUrl};
   }
 
-  // 一般サイト：/feed/ と /rss.xml の2つだけ試す（最小限）
+  // 一般サイト：/feed/ と /rss.xml を試す
   var candidates=[
     siteUrl.replace(/\/?$/,'/feed/'),
     siteUrl.replace(/\/?$/,'/rss.xml'),
@@ -584,10 +589,18 @@ async function fetchSite(siteUrl){
     }catch(e){}
   }
 
-  // RSS見つからず → site:検索
-  siteRssCache[siteUrl]='search';
-  var items=await fetchBySiteSearch(siteUrl);
-  return {items:items, method:'search'};
+  // RSS失敗 → Google News RSSを試す
+  var gnUrl = toGoogleNewsRss(siteUrl);
+  if(gnUrl){
+    try{
+      var items=await fetchRSS(gnUrl);
+      if(items.length>0){ siteRssCache[siteUrl]=gnUrl; return {items:items, method:'googlenews'}; }
+    }catch(e){}
+  }
+
+  // 全部失敗
+  siteRssCache[siteUrl]='failed';
+  return {items:[], method:'failed', url:siteUrl};
 }
 
 // ===== FETCH ONE CATEGORY =====
@@ -621,7 +634,13 @@ async function fetchOne(catId, forceRefresh){
       for(var fi=0;fi<maxLen;fi++){
         fetchResults.forEach(function(res){ if(res.items[fi]) allItems.push(res.items[fi]); });
       }
-      if(!allItems.length) throw new Error('記事が見つかりませんでした');
+      // 取得できなかったサイトを報告
+      var failedSites = fetchResults.filter(function(r){return r.method==='failed';}).map(function(r){return r.url;});
+      if(!allItems.length){
+        var msg = '記事が見つかりませんでした';
+        if(failedSites.length) msg += '\n以下のサイトはRSSに対応していないため取得できませんでした:\n' + failedSites.join('\n');
+        throw new Error(msg);
+      }
 
       // タイトル重複除去
       var seenT=[];
