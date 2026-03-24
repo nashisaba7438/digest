@@ -355,11 +355,7 @@ function loadAll(){
   try{ var c=localStorage.getItem('digest_cache'); if(c) cache=JSON.parse(c); }catch(e){}
   try{ var p=localStorage.getItem('digest_prefs'); if(p) prefs=JSON.parse(p); }catch(e){}
   try{ var s=localStorage.getItem('digest_seen');  if(s) seen=JSON.parse(s); }catch(e){}
-  try{
-    var cv=localStorage.getItem('digest_cats');
-    var custom = cv ? JSON.parse(cv) : {};
-    CATS = Object.assign({}, DEFAULT_CATS, custom);
-  }catch(e){ CATS = Object.assign({}, DEFAULT_CATS); }
+  loadCats();
 }
 
 function saveCache(){
@@ -388,11 +384,43 @@ function saveSeen(){
 }
 
 function saveCats(){
-  var custom = {};
+  var toSave = {};
   Object.keys(CATS).forEach(function(id){
-    if(!DEFAULT_CATS[id]) custom[id] = CATS[id];
+    if(!DEFAULT_CATS[id]){
+      // 完全にカスタムのカテゴリはそのまま保存
+      toSave[id] = CATS[id];
+    } else {
+      // デフォルトカテゴリはfeedsの変更だけ保存
+      var def = DEFAULT_CATS[id];
+      var cur = CATS[id];
+      var feedsChanged = JSON.stringify(cur.feeds||[]) !== JSON.stringify(def.feeds||[]);
+      if(feedsChanged){
+        toSave[id] = {feeds: cur.feeds||[]};
+      }
+    }
   });
-  try{ localStorage.setItem('digest_cats', JSON.stringify(custom)); }catch(e){}
+  try{ localStorage.setItem('digest_cats', JSON.stringify(toSave)); }catch(e){}
+}
+
+function loadCats(){
+  try{
+    var saved = JSON.parse(localStorage.getItem('digest_cats')||'{}');
+    CATS = {};
+    // デフォルトカテゴリをベースにする
+    Object.keys(DEFAULT_CATS).forEach(function(id){
+      CATS[id] = Object.assign({}, DEFAULT_CATS[id]);
+      // 保存されたfeedsがあれば上書き
+      if(saved[id] && saved[id].feeds !== undefined){
+        CATS[id].feeds = saved[id].feeds;
+      }
+    });
+    // カスタムカテゴリを追加
+    Object.keys(saved).forEach(function(id){
+      if(!DEFAULT_CATS[id]) CATS[id] = saved[id];
+    });
+  }catch(e){
+    CATS = Object.assign({}, DEFAULT_CATS);
+  }
 }
 
 function isCacheFresh(catId){
