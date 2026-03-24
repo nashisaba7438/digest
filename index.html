@@ -444,7 +444,6 @@ async function fetchWithProxy(url){
       if(!res.ok) continue;
       var text = await res.text();
       if(!text || text.length < 100) continue;
-      // allorigins/get: {"contents":"xml"}
       if(text.trim().startsWith('{"contents"')){
         try{ var j=JSON.parse(text); if(j.contents && j.contents.length>100) return j.contents; }catch(e){}
         continue;
@@ -452,132 +451,117 @@ async function fetchWithProxy(url){
       return text;
     }catch(e){ continue; }
   }
-  throw new Error('RSSの取得に失敗しました');
+  throw new Error('取得失敗');
 }
 
 async function fetchRSS(url){
   var text = await fetchWithProxy(url);
-  if(!text || text.trim().indexOf('<')!==0 || (text.indexOf('<channel')===-1 && text.indexOf('<feed')===-1)){
-    return [];
-  }
-  var items = [];
-  var cutoff = Date.now() - ONE_MONTH;
-  // RSS <item>
-  var re = /<item[\s>]([\s\S]*?)<\/item>/gi;
-  var m;
+  if(!text || text.trim().indexOf('<')!==0 || (text.indexOf('<channel')===-1 && text.indexOf('<feed')===-1)) return [];
+  var items=[], cutoff=Date.now()-ONE_MONTH;
+  var re=/<item[\s>]([\s\S]*?)<\/item>/gi, m;
   while((m=re.exec(text))!==null){
-    var b = m[1];
-    var title = (b.match(/<title[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/)||[])[1]||'';
-    var link  = (b.match(/<link[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/)||[])[1]||'';
-    if(!link){ var al=b.match(/<link[^>]+href=["'](https?:\/\/[^"'#][^"']+)["']/i); if(al) link=al[1]; }
-    link = link.replace(/[\s\r\n]+/g,'').trim();
-    if(link && /^https?:\/\/[^\/]+\/?$/.test(link)) link='';
-    var desc = (b.match(/<description[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/)||[])[1]||'';
-    var pub  = (b.match(/<pubDate[^>]*>([\s\S]*?)<\/pubDate>/)||[])[1]||'';
-    if(pub){ var d=new Date(pub); if(!isNaN(d)&&d.getTime()<cutoff) continue; }
-    var urlMatch = desc.match(/href="(https?:\/\/(?!news\.google\.com)[^"]+)"/);
-    var finalLink = (urlMatch&&urlMatch[1]) || link.trim();
-    // 画像
+    var b=m[1];
+    var title=(b.match(/<title[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/title>/)||[])[1]||'';
+    var link=(b.match(/<link[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/link>/)||[])[1]||'';
+    if(!link){var al=b.match(/<link[^>]+href=["'](https?:\/\/[^"'#][^"']+)["']/i); if(al) link=al[1];}
+    link=link.replace(/[\t\r\n ]+/g,'').trim();
+    if(link&&/^https?:\/\/[^\/]+\/?$/.test(link)) link='';
+    var desc=(b.match(/<description[^>]*>(?:<!\[CDATA\[)?([\s\S]*?)(?:\]\]>)?<\/description>/)||[])[1]||'';
+    var pub=(b.match(/<pubDate[^>]*>([\s\S]*?)<\/pubDate>/)||[])[1]||'';
+    if(pub){var d=new Date(pub); if(!isNaN(d)&&d.getTime()<cutoff) continue;}
+    var urlMatch=desc.match(/href="(https?:\/\/(?!news\.google\.com)[^"]+)"/);
+    var finalLink=(urlMatch&&urlMatch[1])||link.trim();
     var img='';
     var imgM=b.match(/<media:(?:content|thumbnail)[^>]+url="([^"]+)"/i); if(imgM) img=imgM[1];
-    if(!img){ var encM=b.match(/<enclosure[^>]+url="([^"]+\.(?:jpg|jpeg|png|webp|gif))"[^>]*type="image/i); if(encM) img=encM[1]; }
-    if(!img){ var encM2=b.match(/<enclosure[^>]+type="image[^"]*"[^>]+url="([^"]+)"/i); if(encM2) img=encM2[1]; }
-    if(!img){ var iTag=desc.match(/<img[^>]+src="(https?:\/\/[^"]+\.(?:jpg|jpeg|png|webp|gif)[^"]*)"/i); if(iTag) img=iTag[1]; }
+    if(!img){var encM=b.match(/<enclosure[^>]+url="([^"]+\.(?:jpg|jpeg|png|webp|gif))"[^>]*type="image/i); if(encM) img=encM[1];}
+    if(!img){var encM2=b.match(/<enclosure[^>]+type="image[^"]*"[^>]+url="([^"]+)"/i); if(encM2) img=encM2[1];}
+    if(!img){var iTag=desc.match(/<img[^>]+src="(https?:\/\/[^"]+\.(?:jpg|jpeg|png|webp|gif)[^"]*)"/i); if(iTag) img=iTag[1];}
     if(title.trim()) items.push({
-      title: title.trim().replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'"),
-      link: finalLink, image: img
+      title:title.trim().replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'"),
+      link:finalLink, image:img
     });
   }
-  // Atom <entry>
   if(!items.length){
     var re2=/<entry[\s>]([\s\S]*?)<\/entry>/gi;
     while((m=re2.exec(text))!==null){
       var b=m[1];
       var title=(b.match(/<title[^>]*>([\s\S]*?)<\/title>/)||[])[1]||'';
       var al=b.match(/<link[^>]+href=["'](https?:\/\/[^"']+)["']/i);
-      var link=al?al[1]:'';
-      if(title.trim()) items.push({title:title.trim(),link:link,image:''});
+      if(title.trim()) items.push({title:title.trim(),link:al?al[1]:'',image:''});
     }
   }
-  return items.slice(0,15);
+  return items.slice(0,20);
 }
 
 // ===== GEMINI API =====
-async function gemini(prompt, maxTokens, useSearch){
+async function gemini(prompt, maxTokens){
   var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key='+getKey();
   var body={contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:maxTokens||2000}};
-  if(useSearch) body.tools=[{googleSearch:{}}];
   var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(40000),body:JSON.stringify(body)});
-  if(!res.ok){ var e=await res.json(); throw new Error('Gemini error: '+(e.error&&e.error.message)||res.status); }
+  if(!res.ok){var e=await res.json(); throw new Error('Gemini error: '+((e.error&&e.error.message)||res.status));}
   var j=await res.json();
   var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
   if(!parts) throw new Error('Geminiレスポンスなし');
   return parts.map(function(p){return p.text||'';}).join('');
 }
 
-// ===== FETCH BY SEARCH (Google grounding) =====
-async function fetchBySearch(cat){
-  var today = new Date().toLocaleDateString('ja-JP');
-  var prefStr = getPrefsPrompt();
-  var seenStr = seen.slice(-50).map(function(s){return s.slice(0,25);}).join('、').slice(0,300);
-  var catDefs = {
-    'ホットニュース': '今日の日本国内で話題のトレンドニュース（政治・社会・エンタメ・スポーツ等幅広く）',
-    'AI最新情報': '生成AI・LLM・機械学習・AIサービスに関するニュース（ゲームや金融の話題は除く）',
-    '金融情報': '株式・為替・日経平均・FRB・経済指標・企業業績など金融・経済ニュース（AI・ゲーム・エンタメは除く）',
-    'アニメ': '日本アニメ・声優・マンガのアニメ化に関するニュース（ゲームは除く）',
-    '地政学': '国際情勢・外交・安全保障・地政学リスクに関するニュース',
-  };
-  var catDef = catDefs[cat.label] || (cat.label + 'に関するニュース');
-  var prompt = today + 'の「' + cat.label + '」ニュース5件。カテゴリ定義:' + catDef +
-    '。同じトピックの重複なし。' + prefStr +
-    (seenStr ? '既出除外:' + seenStr : '') +
-    'JSONのみ。[{"title":"タイトル","summary":"100〜200字の概要","importance":3}]';
-
-  var apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=' + getKey();
-  var body = {
+// ===== SITE SEARCH (site:URL検索でRSSなしサイトに対応) =====
+async function fetchBySiteSearch(siteUrl){
+  var apiUrl='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key='+getKey();
+  var today=new Date().toLocaleDateString('ja-JP');
+  var prompt=today+'時点の '+siteUrl+' の最新記事を10件、JSONのみで返せ。[から]で終わること。URLは必ず'+siteUrl+'ドメインの実在するURLにすること。'+
+    '[{"title":"記事タイトル","link":"https://実在するURL","image":""}]';
+  var body={
     contents:[{parts:[{text:prompt}]}],
-    generationConfig:{maxOutputTokens:4000},
+    generationConfig:{maxOutputTokens:3000},
     tools:[{googleSearch:{}}]
   };
-  var res = await fetch(apiUrl, {method:'POST', headers:{'Content-Type':'application/json'}, signal:AbortSignal.timeout(40000), body:JSON.stringify(body)});
-  if(!res.ok){ var er=await res.json(); throw new Error('Gemini error: '+((er.error&&er.error.message)||res.status)); }
-  var j = await res.json();
-  var parts = j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
-  if(!parts) throw new Error('Geminiレスポンスなし');
-  var raw = parts.map(function(p){return p.text||'';}).join('');
+  var res=await fetch(apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(40000),body:JSON.stringify(body)});
+  if(!res.ok){var e=await res.json(); throw new Error('Gemini error: '+((e.error&&e.error.message)||res.status));}
+  var j=await res.json();
+  var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
+  var raw=(parts||[]).map(function(p){return p.text||'';}).join('');
+  // groundingMetadataからURLを取得
+  var meta=j.candidates&&j.candidates[0]&&j.candidates[0].groundingMetadata;
+  var chunks=(meta&&meta.groundingChunks)||[];
+  var sourceUrls=chunks.map(function(ch){return ch.web&&ch.web.uri||'';})
+    .filter(function(u){return u && u.includes(new URL(siteUrl).hostname);});
+  var s=raw.indexOf('['),e=raw.lastIndexOf(']');
+  if(s===-1||e===-1) return sourceUrls.map(function(u){return {title:u,link:u,image:''};}).slice(0,10);
+  try{
+    var arts=parseJson(raw.slice(s,e+1));
+    return arts.map(function(a,i){
+      var link=a.link||'';
+      // example.comや別ドメインはgroundingURLで置き換え
+      if(!link||link.includes('example.com')||!link.includes(new URL(siteUrl).hostname)){
+        link=sourceUrls[i]||sourceUrls[0]||'';
+      }
+      return {title:a.title||'',link:link,image:a.image||''};
+    }).filter(function(a){return a.title;});
+  }catch(e){ return sourceUrls.map(function(u){return {title:u,link:u,image:''};}).slice(0,10); }
+}
 
-  // groundingMetadataからURLを取得（Geminiに作らせない）
-  var meta = j.candidates&&j.candidates[0]&&j.candidates[0].groundingMetadata;
-  var chunks = (meta&&meta.groundingChunks)||[];
-  var sourceUrls = chunks.map(function(ch){return ch.web&&ch.web.uri||'';}).filter(Boolean);
-  // supportチャンクのURLマッピング
-  var supports = (meta&&meta.groundingSupports)||[];
-
-  var s=raw.indexOf('['), e=raw.lastIndexOf(']');
-  if(s===-1||e===-1) throw new Error('JSONパース失敗');
-  var arts = parseJson(raw.slice(s,e+1));
-
-  // 重複タイトルフィルタ
-  var seenT=[];
-  arts = arts.filter(function(a){
-    if(!a.title) return false;
-    var p=a.title.slice(0,20);
-    if(seenT.some(function(x){return x===p;})) return false;
-    seenT.push(p); return true;
-  });
-
-  return arts.map(function(a, i){
-    // groundingSourcesからURLを取得
-    var link = '';
-    if(supports[i] && supports[i].groundingChunkIndices && supports[i].groundingChunkIndices.length){
-      var ci = supports[i].groundingChunkIndices[0];
-      link = sourceUrls[ci] || '';
-    }
-    if(!link) link = sourceUrls[i] || sourceUrls[0] || '';
-    // example.comやgoogle.com/rssは除外
-    if(link && (link.includes('example.com') || link.includes('google.com/rss'))) link = '';
-    return {title:a.title||'', summary:a.summary||'', tag:cat.label, importance:a.importance||3, link:link, image:''};
-  });
+// RSSがあるか自動検出して取得
+async function fetchSite(siteUrl){
+  // まずRSSを試す
+  var rssUrls=[
+    siteUrl.replace(/\/?$/,'/feed/'),
+    siteUrl.replace(/\/?$/,'/rss/'),
+    siteUrl.replace(/\/?$/,'/rss.xml'),
+    siteUrl.replace(/\/?$/,'/feed'),
+    siteUrl.replace(/\/?$/,'/atom.xml'),
+  ];
+  // もとのURLがすでにrss/feedっぽければそのまま試す
+  if(/rss|feed|atom|xml/i.test(siteUrl)) rssUrls.unshift(siteUrl);
+  for(var i=0;i<rssUrls.length;i++){
+    try{
+      var items=await fetchRSS(rssUrls[i]);
+      if(items.length>0) return {items:items, method:'rss'};
+    }catch(e){}
+  }
+  // RSSがなければsite:検索
+  var items=await fetchBySiteSearch(siteUrl);
+  return {items:items, method:'search'};
 }
 
 // ===== FETCH ONE CATEGORY =====
@@ -594,79 +578,69 @@ async function fetchOne(catId, forceRefresh){
   if(box) box.innerHTML='<div class="loading-state"><div class="loading-bar-wrap"><div class="loading-bar"></div></div><div class="loading-text">取得中...</div></div>';
   try{
     var result;
-    var hasFeeds = cat.feeds && cat.feeds.length > 0;
 
-    if(!hasFeeds){
-      // feedなし → Google Search grounding のみ
-      result = await fetchBySearch(cat);
+    if(cat.isHot){
+      // ホットニュースだけGoogle Search grounding
+      result = await fetchHotNews();
+    } else if(!cat.feeds || !cat.feeds.length){
+      throw new Error('サイトが登録されていません。カテゴリ設定からサイトを追加してください。');
     } else {
-      // RSSを取得
+      // 各サイトから記事を取得（RSSあり→RSS、なし→site:検索）
       var allItems=[];
-      var feedResults=await Promise.all(cat.feeds.map(function(f){ return fetchRSS(f).catch(function(){return [];}); }));
-      var maxLen=Math.max.apply(null,feedResults.map(function(r){return r.length;}));
-      for(var fi=0;fi<maxLen;fi++) feedResults.forEach(function(res){if(res[fi]) allItems.push(res[fi]);});
-
-      if(!allItems.length){
-        // RSS失敗 → useSearchならSearch、そうでなければエラー
-        if(cat.useSearch){
-          result = await fetchBySearch(cat);
-        } else {
-          throw new Error('記事が見つかりませんでした');
-        }
-      } else {
-        // RSS取得成功 → タイトル重複除去
-        var seenT=[];
-        var items=allItems.filter(function(it){
-          var t=(it.title||'').trim(); var p=t.slice(0,20);
-          if(seenT.some(function(s){return s===t||s.slice(0,20)===p;})) return false;
-          seenT.push(t); return true;
-        }).slice(0,15);
-
-        // カテゴリ間重複チェック（先頭15文字一致は除外）
-        var allCachedTitles=[];
-        Object.keys(cache).forEach(function(id){
-          if(id!==catId && cache[id] && cache[id].articles)
-            cache[id].articles.forEach(function(a){allCachedTitles.push(a.title);});
-        });
-        items=items.filter(function(it){
-          return !allCachedTitles.some(function(t){return isSimilarTitle(it.title,t);});
-        });
-
-        if(!items.length){
-          if(cat.useSearch){
-            result = await fetchBySearch(cat);
-          } else {
-            throw new Error('記事が見つかりませんでした');
-          }
-        } else {
-          // AI要約
-          var headlines=items.map(function(it,i){return '['+i+'] '+it.title;}).join('\n');
-          var prefStr=getPrefsPrompt();
-          var prompt='「'+cat.label+'」ヘッドライン:\n'+headlines+'\n\n重要5件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。'+prefStr+'\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","tag":"'+cat.label+'","importance":3}]';
-          var raw=await gemini(prompt,4000);
-          var sv=raw.indexOf('['),ev=raw.lastIndexOf(']');
-          if(sv===-1||ev===-1) throw new Error('JSONパース失敗: '+raw.slice(0,80));
-          var arts=parseJson(raw.slice(sv,ev+1));
-          result=arts.map(function(a){
-            var atitle=(a.title||'').trim(); var matched=null;
-            for(var i=0;i<items.length;i++) if(items[i].title.trim()===atitle){matched=items[i];break;}
-            if(!matched) for(var i=0;i<items.length;i++){var it=items[i].title.trim(); if(it.indexOf(atitle)!==-1||atitle.indexOf(it)!==-1){matched=items[i];break;}}
-            if(!matched){var p10=atitle.slice(0,10); for(var i=0;i<items.length;i++) if(items[i].title.indexOf(p10)!==-1){matched=items[i];break;}}
-            return {title:a.title, summary:a.summary, tag:a.tag||cat.label, importance:a.importance||3, link:matched?matched.link:'', image:matched?matched.image||'':''};
-          });
-        }
+      var fetchResults=await Promise.all(cat.feeds.map(function(f){
+        return fetchSite(f).catch(function(){ return {items:[],method:'failed'}; });
+      }));
+      // インターリーブ（各サイトから均等に）
+      var maxLen=Math.max.apply(null,fetchResults.map(function(r){return r.items.length;}));
+      for(var fi=0;fi<maxLen;fi++){
+        fetchResults.forEach(function(res){ if(res.items[fi]) allItems.push(res.items[fi]); });
       }
-    }
+      if(!allItems.length) throw new Error('記事が見つかりませんでした');
 
-    // 👍した記事を除外（Search系のみ）
-    if(!hasFeeds || cat.useSearch){
-      result = result.filter(function(a){
-        return !(prefs.likes&&prefs.likes[a.title] > 0);
+      // タイトル重複除去
+      var seenT=[];
+      var items=allItems.filter(function(it){
+        var t=(it.title||'').trim(); var p=t.slice(0,20);
+        if(seenT.some(function(s){return s===t||s.slice(0,20)===p;})) return false;
+        seenT.push(t); return true;
       });
+
+      // カテゴリ間重複除去（先頭15文字一致）
+      var allCachedTitles=[];
+      Object.keys(cache).forEach(function(id){
+        if(id!==catId && cache[id] && cache[id].articles)
+          cache[id].articles.forEach(function(a){allCachedTitles.push(a.title);});
+      });
+      items=items.filter(function(it){
+        return !allCachedTitles.some(function(t){return isSimilarTitle(it.title,t);});
+      });
+
+      if(!items.length) throw new Error('他カテゴリと重複する記事のみでした');
+
+      // 👍した記事を除外
+      var likedTitles=Object.keys(prefs.likes||{});
+      items=items.filter(function(it){
+        return !likedTitles.some(function(lt){ return lt===it.title||(lt.length>10&&it.title.indexOf(lt.slice(0,15))!==-1); });
+      });
+
+      // AI要約（8件）
+      var headlines=items.slice(0,20).map(function(it,i){return '['+i+'] '+it.title;}).join('\n');
+      var prefStr=getPrefsPrompt();
+      var prompt='「'+cat.label+'」ヘッドライン:\n'+headlines+'\n\n重要8件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。'+prefStr+'\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","importance":3}]';
+      var raw=await gemini(prompt,5000);
+      var sv=raw.indexOf('['),ev=raw.lastIndexOf(']');
+      if(sv===-1||ev===-1) throw new Error('JSONパース失敗: '+raw.slice(0,80));
+      var arts=parseJson(raw.slice(sv,ev+1));
+      result=arts.map(function(a){
+        var atitle=(a.title||'').trim(); var matched=null;
+        for(var i=0;i<items.length;i++) if(items[i].title.trim()===atitle){matched=items[i];break;}
+        if(!matched) for(var i=0;i<items.length;i++){var it=items[i].title.trim(); if(it.indexOf(atitle)!==-1||atitle.indexOf(it)!==-1){matched=items[i];break;}}
+        if(!matched){var p10=atitle.slice(0,10); for(var i=0;i<items.length;i++) if(items[i].title.indexOf(p10)!==-1){matched=items[i];break;}}
+        return {title:a.title, summary:a.summary, tag:cat.label, importance:a.importance||3, link:matched?matched.link:'', image:matched?matched.image||'':''};
+      }).filter(function(a){return a.title;});
     }
 
-    if(!result || !result.length) throw new Error('記事が見つかりませんでした');
-
+    if(!result||!result.length) throw new Error('記事が見つかりませんでした');
     cache[catId]={articles:result, updatedAt:new Date().toISOString()};
     saveCache();
     renderArticles(catId, result);
@@ -677,6 +651,47 @@ async function fetchOne(catId, forceRefresh){
   }finally{
     if(btn){btn.disabled=false;btn.innerHTML='再取得';}
   }
+}
+
+// ===== HOT NEWS =====
+async function fetchHotNews(){
+  var today=new Date().toLocaleDateString('ja-JP');
+  var prefStr=getPrefsPrompt();
+  var seenStr=seen.slice(-30).map(function(s){return s.slice(0,20);}).join('、').slice(0,200);
+  var prompt=today+'の日本で話題のニュース8件。'+prefStr+
+    (seenStr?'既出除外:'+seenStr:'')+
+    'JSONのみ。[{"title":"タイトル","summary":"100〜200字","importance":3}]';
+  var apiUrl='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key='+getKey();
+  var body={contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:4000},tools:[{googleSearch:{}}]};
+  var res=await fetch(apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(40000),body:JSON.stringify(body)});
+  if(!res.ok){var e=await res.json(); throw new Error('Gemini error: '+((e.error&&e.error.message)||res.status));}
+  var j=await res.json();
+  var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
+  var raw=(parts||[]).map(function(p){return p.text||'';}).join('');
+  var meta=j.candidates&&j.candidates[0]&&j.candidates[0].groundingMetadata;
+  var chunks=(meta&&meta.groundingChunks)||[];
+  var sourceUrls=chunks.map(function(ch){return ch.web&&ch.web.uri||'';}).filter(Boolean);
+  var supports=(meta&&meta.groundingSupports)||[];
+  var s=raw.indexOf('['),e=raw.lastIndexOf(']');
+  if(s===-1||e===-1) throw new Error('JSONパース失敗');
+  var arts=parseJson(raw.slice(s,e+1));
+  var seenT=[];
+  arts=arts.filter(function(a){
+    if(!a.title) return false;
+    var p=a.title.slice(0,20);
+    if(seenT.some(function(x){return x===p;})) return false;
+    seenT.push(p); return true;
+  });
+  var result=arts.map(function(a,i){
+    var link='';
+    if(supports[i]&&supports[i].groundingChunkIndices&&supports[i].groundingChunkIndices.length){
+      link=sourceUrls[supports[i].groundingChunkIndices[0]]||'';
+    }
+    if(!link||link.includes('example.com')) link=sourceUrls[i]||sourceUrls[0]||'';
+    return {title:a.title||'',summary:a.summary||'',tag:'ホットニュース',importance:a.importance||3,link:link,image:''};
+  });
+  addSeen(result.map(function(a){return a.title;}));
+  return result;
 }
 
 // ===== FETCH ALL =====
