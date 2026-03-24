@@ -541,25 +541,51 @@ async function fetchBySiteSearch(siteUrl){
   }catch(e){ return sourceUrls.map(function(u){return {title:u,link:u,image:''};}).slice(0,10); }
 }
 
-// RSSがあるか自動検出して取得
+// RSSがあるか自動検出して取得（高速化：RSS判定をキャッシュ）
+var siteRssCache = {}; // {url: 'rss_url' or 'search'}
+
 async function fetchSite(siteUrl){
-  // まずRSSを試す
-  var rssUrls=[
-    siteUrl.replace(/\/?$/,'/feed/'),
-    siteUrl.replace(/\/?$/,'/rss/'),
-    siteUrl.replace(/\/?$/,'/rss.xml'),
-    siteUrl.replace(/\/?$/,'/feed'),
-    siteUrl.replace(/\/?$/,'/atom.xml'),
-  ];
-  // もとのURLがすでにrss/feedっぽければそのまま試す
-  if(/rss|feed|atom|xml/i.test(siteUrl)) rssUrls.unshift(siteUrl);
-  for(var i=0;i<rssUrls.length;i++){
+  // キャッシュ済みならそのまま使う
+  if(siteRssCache[siteUrl] === 'search'){
+    var items=await fetchBySiteSearch(siteUrl);
+    return {items:items, method:'search'};
+  }
+  if(siteRssCache[siteUrl] && siteRssCache[siteUrl] !== 'search'){
     try{
-      var items=await fetchRSS(rssUrls[i]);
+      var items=await fetchRSS(siteRssCache[siteUrl]);
       if(items.length>0) return {items:items, method:'rss'};
     }catch(e){}
+    // キャッシュのRSSが失敗したらsearchに切り替え
+    siteRssCache[siteUrl]='search';
+    var items=await fetchBySiteSearch(siteUrl);
+    return {items:items, method:'search'};
   }
-  // RSSがなければsite:検索
+
+  // 初回：URLがrss/feed/xmlっぽければそのまま試す
+  if(/rss|feed|atom|xml/i.test(siteUrl)){
+    try{
+      var items=await fetchRSS(siteUrl);
+      if(items.length>0){ siteRssCache[siteUrl]=siteUrl; return {items:items, method:'rss'}; }
+    }catch(e){}
+    siteRssCache[siteUrl]='search';
+    var items=await fetchBySiteSearch(siteUrl);
+    return {items:items, method:'search'};
+  }
+
+  // 一般サイト：/feed/ と /rss.xml の2つだけ試す（最小限）
+  var candidates=[
+    siteUrl.replace(/\/?$/,'/feed/'),
+    siteUrl.replace(/\/?$/,'/rss.xml'),
+  ];
+  for(var i=0;i<candidates.length;i++){
+    try{
+      var items=await fetchRSS(candidates[i]);
+      if(items.length>0){ siteRssCache[siteUrl]=candidates[i]; return {items:items, method:'rss'}; }
+    }catch(e){}
+  }
+
+  // RSS見つからず → site:検索
+  siteRssCache[siteUrl]='search';
   var items=await fetchBySiteSearch(siteUrl);
   return {items:items, method:'search'};
 }
