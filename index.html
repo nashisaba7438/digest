@@ -517,38 +517,66 @@ async function gemini(prompt, maxTokens, useSearch){
 
 // ===== FETCH BY SEARCH (Google grounding) =====
 async function fetchBySearch(cat){
-  var prefStr = getPrefsPrompt();
-  var seenStr = seen.slice(-50).map(function(s){return s.slice(0,25);}).join('、').slice(0,400);
   var today = new Date().toLocaleDateString('ja-JP');
-  // カテゴリ別の具体的な制約
-  var catDef = {
-    'ホットニュース': '今日の日本国内で話題のニュース（政治・社会・エンタメ・スポーツ等）',
-    'AI最新情報': '生成AI・LLM・機械学習・AIサービスに関するニュース。ゲームや金融の記事は除外',
-    '金融情報': '株式市場・為替・日経平均・FRB金利・経済指標・企業決算など純粋な金融・経済ニュース。AI・ゲーム・エンタメは除外',
-    'アニメ': '日本のアニメ・声優・マンガ原作のアニメ化に関するニュース。ゲームは除外',
+  var prefStr = getPrefsPrompt();
+  var seenStr = seen.slice(-50).map(function(s){return s.slice(0,25);}).join('、').slice(0,300);
+  var catDefs = {
+    'ホットニュース': '今日の日本国内で話題のトレンドニュース（政治・社会・エンタメ・スポーツ等幅広く）',
+    'AI最新情報': '生成AI・LLM・機械学習・AIサービスに関するニュース（ゲームや金融の話題は除く）',
+    '金融情報': '株式・為替・日経平均・FRB・経済指標・企業業績など金融・経済ニュース（AI・ゲーム・エンタメは除く）',
+    'アニメ': '日本アニメ・声優・マンガのアニメ化に関するニュース（ゲームは除く）',
     '地政学': '国際情勢・外交・安全保障・地政学リスクに関するニュース',
   };
-  var constraint = catDef[cat.label] || cat.label + 'に直接関係するニュースのみ';
-  var prompt = '【指示】' + today + '時点の最新ニュースから、以下のカテゴリに厳密に合致する記事を5件選んでJSONのみで返せ。[から]で終わること。' +
-    '【カテゴリ定義】' + constraint +
-    '【重要】タイトルが似ている記事は1件のみ。同じ企業・トピックは重複させないこと。' +
-    prefStr +
-    (seenStr ? '【除外】既出なので選ばないこと: ' + seenStr : '') +
-    '[{"title":"記事タイトル","summary":"100〜200字","tag":"' + cat.label + '","importance":3,"link":"https://実在する記事URL"}]';
-  var raw = await gemini(prompt, 4000, true);
+  var catDef = catDefs[cat.label] || (cat.label + 'に関するニュース');
+  var prompt = today + 'の「' + cat.label + '」ニュース5件。カテゴリ定義:' + catDef +
+    '。同じトピックの重複なし。' + prefStr +
+    (seenStr ? '既出除外:' + seenStr : '') +
+    'JSONのみ。[{"title":"タイトル","summary":"100〜200字の概要","importance":3}]';
+
+  var apiUrl = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=' + getKey();
+  var body = {
+    contents:[{parts:[{text:prompt}]}],
+    generationConfig:{maxOutputTokens:4000},
+    tools:[{googleSearch:{}}]
+  };
+  var res = await fetch(apiUrl, {method:'POST', headers:{'Content-Type':'application/json'}, signal:AbortSignal.timeout(40000), body:JSON.stringify(body)});
+  if(!res.ok){ var er=await res.json(); throw new Error('Gemini error: '+((er.error&&er.error.message)||res.status)); }
+  var j = await res.json();
+  var parts = j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
+  if(!parts) throw new Error('Geminiレスポンスなし');
+  var raw = parts.map(function(p){return p.text||'';}).join('');
+
+  // groundingMetadataからURLを取得（Geminiに作らせない）
+  var meta = j.candidates&&j.candidates[0]&&j.candidates[0].groundingMetadata;
+  var chunks = (meta&&meta.groundingChunks)||[];
+  var sourceUrls = chunks.map(function(ch){return ch.web&&ch.web.uri||'';}).filter(Boolean);
+  // supportチャンクのURLマッピング
+  var supports = (meta&&meta.groundingSupports)||[];
+
   var s=raw.indexOf('['), e=raw.lastIndexOf(']');
   if(s===-1||e===-1) throw new Error('JSONパース失敗');
-  var arts=parseJson(raw.slice(s,e+1));
-  // タイトル重複をさらにフィルタ
+  var arts = parseJson(raw.slice(s,e+1));
+
+  // 重複タイトルフィルタ
   var seenT=[];
-  return arts.filter(function(a){
+  arts = arts.filter(function(a){
     if(!a.title) return false;
     var p=a.title.slice(0,20);
-    if(seenT.some(function(s){return s===p;})) return false;
-    seenT.push(p);
-    return true;
-  }).map(function(a){
-    return {title:a.title||'', summary:a.summary||'', tag:a.tag||cat.label, importance:a.importance||3, link:a.link||'', image:''};
+    if(seenT.some(function(x){return x===p;})) return false;
+    seenT.push(p); return true;
+  });
+
+  return arts.map(function(a, i){
+    // groundingSourcesからURLを取得
+    var link = '';
+    if(supports[i] && supports[i].groundingChunkIndices && supports[i].groundingChunkIndices.length){
+      var ci = supports[i].groundingChunkIndices[0];
+      link = sourceUrls[ci] || '';
+    }
+    if(!link) link = sourceUrls[i] || sourceUrls[0] || '';
+    // example.comやgoogle.com/rssは除外
+    if(link && (link.includes('example.com') || link.includes('google.com/rss'))) link = '';
+    return {title:a.title||'', summary:a.summary||'', tag:cat.label, importance:a.importance||3, link:link, image:''};
   });
 }
 
@@ -566,94 +594,82 @@ async function fetchOne(catId, forceRefresh){
   if(box) box.innerHTML='<div class="loading-state"><div class="loading-bar-wrap"><div class="loading-bar"></div></div><div class="loading-text">取得中...</div></div>';
   try{
     var result;
-    if(!cat.feeds || !cat.feeds.length){
-      // feedなし → Google Search grounding
+    var hasFeeds = cat.feeds && cat.feeds.length > 0;
+
+    if(!hasFeeds){
+      // feedなし → Google Search grounding のみ
       result = await fetchBySearch(cat);
-    } else if(cat.useSearch){
-      // useSearchのカテゴリはRSS+Search両方試みる（feedがあればRSSも使う）
-      var rssItems = [];
-      try{
-        var feedResults=await Promise.all(cat.feeds.map(function(f){ return fetchRSS(f).catch(function(){return [];}); }));
-        var maxLen=Math.max.apply(null,feedResults.map(function(r){return r.length;}));
-        for(var fi=0;fi<maxLen;fi++) feedResults.forEach(function(res){if(res[fi]) rssItems.push(res[fi]);});
-      }catch(e){}
-      if(rssItems.length >= 3){
-        // RSSで十分取れた場合はRSS優先
-        var seenT2=[];
-        var items2=rssItems.filter(function(it){
-          var t=(it.title||'').trim(); var p=t.slice(0,20);
-          if(seenT2.some(function(s){return s===t||s.slice(0,20)===p;})) return false;
-          seenT2.push(t); return true;
-        }).filter(function(it){return !isSeenTitle(it.title);}).slice(0,15);
-        if(items2.length){
-          var headlines2=items2.map(function(it,i){return '['+i+'] '+it.title;}).join('\n');
-          var prefStr2=getPrefsPrompt();
-          var prompt2='「'+cat.label+'」ヘッドライン:\n'+headlines2+'\n\n重要5件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。'+prefStr2+'\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","tag":"'+cat.label+'","importance":3}]';
-          var raw2=await gemini(prompt2,4000);
-          var sv2=raw2.indexOf('['),ev2=raw2.lastIndexOf(']');
-          if(sv2!==-1&&ev2!==-1){
-            var arts2=parseJson(raw2.slice(sv2,ev2+1));
-            result=arts2.map(function(a){
-              var atitle=(a.title||'').trim(); var matched=null;
-              for(var i=0;i<items2.length;i++) if(items2[i].title.trim()===atitle){matched=items2[i];break;}
-              if(!matched) for(var i=0;i<items2.length;i++){var it=items2[i].title.trim(); if(it.indexOf(atitle)!==-1||atitle.indexOf(it)!==-1){matched=items2[i];break;}}
-              return {title:a.title,summary:a.summary,tag:a.tag||cat.label,importance:a.importance||3,link:matched?matched.link:'',image:matched?matched.image||'':''};
-            });
-          }
-        }
-      }
-      if(!result || !result.length){
-        // RSSが取れない/少ない場合はGoogle Search groundingにフォールバック
-        result = await fetchBySearch(cat);
-      }
     } else {
-      // RSS取得
+      // RSSを取得
       var allItems=[];
       var feedResults=await Promise.all(cat.feeds.map(function(f){ return fetchRSS(f).catch(function(){return [];}); }));
       var maxLen=Math.max.apply(null,feedResults.map(function(r){return r.length;}));
       for(var fi=0;fi<maxLen;fi++) feedResults.forEach(function(res){if(res[fi]) allItems.push(res[fi]);});
-      if(!allItems.length) throw new Error('記事が見つかりませんでした');
-      // 重複除去
-      var seenT=[];
-      var items=allItems.filter(function(it){
-        var t=(it.title||'').trim(); var p=t.slice(0,20);
-        if(seenT.some(function(s){return s===t||s.slice(0,20)===p;})) return false;
-        seenT.push(t); return true;
-      }).slice(0,15);
-      // 既読除外
-      items=items.filter(function(it){return !isSeenTitle(it.title);});
-      if(!items.length) throw new Error('新しい記事がありません');
-      // カテゴリ間重複チェック
-      var allCached=[];
-      Object.keys(cache).forEach(function(id){
-        if(id!==catId && cache[id] && cache[id].articles)
-          cache[id].articles.forEach(function(a){allCached.push(a.title);});
-      });
-      items=items.filter(function(it){
-        return !allCached.some(function(t){return isSimilarTitle(it.title,t);});
-      });
-      if(!items.length) throw new Error('他カテゴリと重複する記事のみでした');
-      // AI要約
-      var headlines=items.map(function(it,i){return '['+i+'] '+it.title;}).join('\n');
-      var prefStr=getPrefsPrompt();
-      var prompt='「'+cat.label+'」ヘッドライン:\n'+headlines+'\n\n重要5件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。'+prefStr+'\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","tag":"'+cat.label+'","importance":1〜5の数値}]';
-      var raw=await gemini(prompt,4000);
-      var sv=raw.indexOf('['),ev=raw.lastIndexOf(']');
-      if(sv===-1||ev===-1) throw new Error('JSONパース失敗: '+raw.slice(0,80));
-      var arts=parseJson(raw.slice(sv,ev+1));
-      result=arts.map(function(a){
-        var atitle=(a.title||'').trim(); var matched=null;
-        for(var i=0;i<items.length;i++) if(items[i].title.trim()===atitle){matched=items[i];break;}
-        if(!matched) for(var i=0;i<items.length;i++){var it=items[i].title.trim(); if(it.indexOf(atitle)!==-1||atitle.indexOf(it)!==-1){matched=items[i];break;}}
-        if(!matched){var p10=atitle.slice(0,10); for(var i=0;i<items.length;i++) if(items[i].title.indexOf(p10)!==-1){matched=items[i];break;}}
-        return {title:a.title,summary:a.summary,tag:a.tag||cat.label,importance:a.importance||3,link:matched?matched.link:'',image:matched?matched.image||'':''};
+
+      if(!allItems.length){
+        // RSS失敗 → useSearchならSearch、そうでなければエラー
+        if(cat.useSearch){
+          result = await fetchBySearch(cat);
+        } else {
+          throw new Error('記事が見つかりませんでした');
+        }
+      } else {
+        // RSS取得成功 → タイトル重複除去
+        var seenT=[];
+        var items=allItems.filter(function(it){
+          var t=(it.title||'').trim(); var p=t.slice(0,20);
+          if(seenT.some(function(s){return s===t||s.slice(0,20)===p;})) return false;
+          seenT.push(t); return true;
+        }).slice(0,15);
+
+        // カテゴリ間重複チェック（先頭15文字一致は除外）
+        var allCachedTitles=[];
+        Object.keys(cache).forEach(function(id){
+          if(id!==catId && cache[id] && cache[id].articles)
+            cache[id].articles.forEach(function(a){allCachedTitles.push(a.title);});
+        });
+        items=items.filter(function(it){
+          return !allCachedTitles.some(function(t){return isSimilarTitle(it.title,t);});
+        });
+
+        if(!items.length){
+          if(cat.useSearch){
+            result = await fetchBySearch(cat);
+          } else {
+            throw new Error('記事が見つかりませんでした');
+          }
+        } else {
+          // AI要約
+          var headlines=items.map(function(it,i){return '['+i+'] '+it.title;}).join('\n');
+          var prefStr=getPrefsPrompt();
+          var prompt='「'+cat.label+'」ヘッドライン:\n'+headlines+'\n\n重要5件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。'+prefStr+'\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","tag":"'+cat.label+'","importance":3}]';
+          var raw=await gemini(prompt,4000);
+          var sv=raw.indexOf('['),ev=raw.lastIndexOf(']');
+          if(sv===-1||ev===-1) throw new Error('JSONパース失敗: '+raw.slice(0,80));
+          var arts=parseJson(raw.slice(sv,ev+1));
+          result=arts.map(function(a){
+            var atitle=(a.title||'').trim(); var matched=null;
+            for(var i=0;i<items.length;i++) if(items[i].title.trim()===atitle){matched=items[i];break;}
+            if(!matched) for(var i=0;i<items.length;i++){var it=items[i].title.trim(); if(it.indexOf(atitle)!==-1||atitle.indexOf(it)!==-1){matched=items[i];break;}}
+            if(!matched){var p10=atitle.slice(0,10); for(var i=0;i<items.length;i++) if(items[i].title.indexOf(p10)!==-1){matched=items[i];break;}}
+            return {title:a.title, summary:a.summary, tag:a.tag||cat.label, importance:a.importance||3, link:matched?matched.link:'', image:matched?matched.image||'':''};
+          });
+        }
+      }
+    }
+
+    // 👍した記事を除外（Search系のみ）
+    if(!hasFeeds || cat.useSearch){
+      result = result.filter(function(a){
+        return !(prefs.likes&&prefs.likes[a.title] > 0);
       });
     }
-    // 既読に追加
-    addSeen(result.map(function(a){return a.title;}));
-    cache[catId]={articles:result,updatedAt:new Date().toISOString()};
+
+    if(!result || !result.length) throw new Error('記事が見つかりませんでした');
+
+    cache[catId]={articles:result, updatedAt:new Date().toISOString()};
     saveCache();
-    renderArticles(catId,result);
+    renderArticles(catId, result);
     var upd=document.getElementById('upd-'+catId);
     if(upd) upd.textContent='更新: '+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
   }catch(err){
