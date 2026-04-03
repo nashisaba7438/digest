@@ -329,13 +329,11 @@ const PROXIES = [
 ];
 
 const DEFAULT_CATS = {
-  hot:          {label:'ホットニュース', icon:'🔥', tagClass:'tag-hot',   useSearch:true, searchQuery:'今日 日本 話題 トレンドニュース', isHot:true, fixed:true},
-  game_4gamer:  {label:'ゲーム 4Gamer',  icon:'🎮', tagClass:'tag-game',  feeds:['https://www.4gamer.net/rss/index.xml'], fixed:true},
-  game_gamewatch:{label:'ゲーム GameWatch',icon:'🕹',tagClass:'tag-game', feeds:['https://game.watch.impress.co.jp/data/rss/1.0/gmw/feed.rdf'], fixed:true},
-  anime:        {label:'アニメ',          icon:'📺', tagClass:'tag-anime', useSearch:true, searchQuery:'最新アニメ 新番組 OR 声優 OR アニメ化', fixed:true},
-  ai:           {label:'AI最新情報',      icon:'🤖', tagClass:'tag-ai',    useSearch:true, searchQuery:'生成AI OR LLM OR ChatGPT 最新ニュース', fixed:true},
-  geopolitics:  {label:'地政学',          icon:'🌍', tagClass:'tag-geo',   useSearch:true, searchQuery:'地政学 OR 国際情勢 OR 外交 最新', fixed:true},
-  finance:      {label:'金融情報',        icon:'💹', tagClass:'tag-fin',   useSearch:true, searchQuery:'日本株 OR 為替相場 OR 日経平均 OR FRB OR 金融市場 最新動向', fixed:true},
+  hot:      {label:'ホットニュース', icon:'🔥', tagClass:'tag-hot', useSearch:true, searchQuery:'今日 日本 話題 トレンドニュース', isHot:true, fixed:true},
+  news:     {label:'国内ニュース',   icon:'📰', tagClass:'tag-geo', feeds:['https://www.nhk.or.jp/rss/news/cat0.xml'], fixed:true},
+  anime:    {label:'アニメ',         icon:'📺', tagClass:'tag-anime', feeds:['https://animeanime.jp/rss/index.rdf'], fixed:true},
+  ai:       {label:'AI最新情報',     icon:'🤖', tagClass:'tag-ai',  feeds:['https://rss.itmedia.co.jp/rss/2.0/aiplus.xml'], fixed:true},
+  finance:  {label:'経済・金融',     icon:'💹', tagClass:'tag-fin', feeds:['https://business.nikkei.com/rss/sns/nb.rdf'], fixed:true},
 };
 
 // ===== STATE =====
@@ -479,7 +477,7 @@ async function fetchWithProxy(url){
       return text;
     }catch(e){ continue; }
   }
-  throw new Error('取得失敗');
+  throw new Error('RSSの取得に失敗しました（プロキシが不安定な可能性があります）');
 }
 
 async function fetchRSS(url){
@@ -526,10 +524,18 @@ async function gemini(prompt, maxTokens){
   var url='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key='+getKey();
   var body={contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:maxTokens||2000}};
   var res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(40000),body:JSON.stringify(body)});
-  if(!res.ok){var e=await res.json(); throw new Error('Gemini error: '+((e.error&&e.error.message)||res.status));}
+  if(!res.ok){
+    var e=await res.json();
+    var status=res.status;
+    var msg=e.error&&e.error.message||'';
+    if(status===400||msg.includes('API_KEY')||msg.includes('invalid')) throw new Error('APIキーが無効です。設定からAPIキーを確認してください。');
+    if(status===429) throw new Error('APIの利用制限に達しました。しばらく待ってから再取得してください。（無料枠の上限超過）');
+    if(status===403) throw new Error('APIキーの権限がありません。Google AI StudioでAPIキーを確認してください。');
+    throw new Error('Gemini APIエラー（'+status+'）: '+msg);
+  }
   var j=await res.json();
   var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
-  if(!parts) throw new Error('Geminiレスポンスなし');
+  if(!parts) throw new Error('AI応答が空でした。再取得してください。');
   return parts.map(function(p){return p.text||'';}).join('');
 }
 
@@ -545,7 +551,15 @@ async function fetchBySiteSearch(siteUrl){
     tools:[{googleSearch:{}}]
   };
   var res=await fetch(apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(40000),body:JSON.stringify(body)});
-  if(!res.ok){var e=await res.json(); throw new Error('Gemini error: '+((e.error&&e.error.message)||res.status));}
+  if(!res.ok){
+    var e=await res.json();
+    var status=res.status;
+    var msg=e.error&&e.error.message||'';
+    if(status===400||msg.includes('API_KEY')||msg.includes('invalid')) throw new Error('APIキーが無効です。設定からAPIキーを確認してください。');
+    if(status===429) throw new Error('APIの利用制限に達しました。しばらく待ってから再取得してください。（無料枠の上限超過）');
+    if(status===403) throw new Error('APIキーの権限がありません。Google AI StudioでAPIキーを確認してください。');
+    throw new Error('Gemini APIエラー（'+status+'）: '+msg);
+  }
   var j=await res.json();
   var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
   var raw=(parts||[]).map(function(p){return p.text||'';}).join('');
@@ -666,7 +680,7 @@ async function fetchOne(catId, forceRefresh){
       var failedSites = fetchResults.filter(function(r){return r.method==='failed';}).map(function(r){return r.url;});
       if(!allItems.length){
         var msg = '記事が見つかりませんでした';
-        if(failedSites.length) msg += '\n以下のサイトはRSSに対応していないため取得できませんでした:\n' + failedSites.join('\n');
+        if(failedSites.length) msg += '\n⚠️ 以下のURLからは記事を取得できませんでした（RSSなし・またはプロキシでブロック）:\n' + failedSites.map(function(u){return '・'+u;}).join('\n') + '\n\nカテゴリ設定から削除するか、別のRSS URLを登録してください。';
         throw new Error(msg);
       }
 
@@ -702,7 +716,7 @@ async function fetchOne(catId, forceRefresh){
       var prompt='「'+cat.label+'」ヘッドライン:\n'+headlines+'\n\n重要8件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。'+prefStr+'\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","importance":3}]';
       var raw=await gemini(prompt,5000);
       var sv=raw.indexOf('['),ev=raw.lastIndexOf(']');
-      if(sv===-1||ev===-1) throw new Error('JSONパース失敗: '+raw.slice(0,80));
+      if(sv===-1||ev===-1) throw new Error('AI応答のパースに失敗しました。再取得してください。（応答: '+raw.slice(0,60)+'）');
       var arts=parseJson(raw.slice(sv,ev+1));
       result=arts.map(function(a){
         var atitle=(a.title||'').trim(); var matched=null;
@@ -714,9 +728,27 @@ async function fetchOne(catId, forceRefresh){
     }
 
     if(!result||!result.length) throw new Error('記事が見つかりませんでした');
+
+    // 前回キャッシュと比較して変化があるか確認
+    var prevArticles = cache[catId] && cache[catId].articles;
+    var prevTitles = prevArticles ? prevArticles.map(function(a){return a.title;}).join('|') : '';
+    var newTitles = result.map(function(a){return a.title;}).join('|');
+    var hasChanged = prevTitles !== newTitles;
+
     cache[catId]={articles:result, updatedAt:new Date().toISOString()};
     saveCache();
     renderArticles(catId, result);
+
+    // 変化がなかった場合は通知
+    if(forceRefresh && prevArticles && !hasChanged){
+      var noNewBox = document.createElement('div');
+      noNewBox.className = 'no-new-box';
+      noNewBox.innerHTML = 'ℹ️ 新着記事はありませんでした（記事は前回取得時から変わっていません）';
+      noNewBox.style.cssText = 'padding:10px 16px;background:rgba(255,255,255,0.05);border-radius:6px;color:var(--muted);font-size:0.78rem;margin-bottom:12px;';
+      var artBox = document.getElementById('art-'+catId);
+      if(artBox) artBox.insertBefore(noNewBox, artBox.firstChild);
+      setTimeout(function(){ if(noNewBox.parentNode) noNewBox.parentNode.removeChild(noNewBox); }, 5000);
+    }
     var upd=document.getElementById('upd-'+catId);
     if(upd) upd.textContent='更新: '+new Date().toLocaleTimeString('ja-JP',{hour:'2-digit',minute:'2-digit'});
   }catch(err){
@@ -738,7 +770,15 @@ async function fetchHotNews(){
   var apiUrl='https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key='+getKey();
   var body={contents:[{parts:[{text:prompt}]}],generationConfig:{maxOutputTokens:4000},tools:[{googleSearch:{}}]};
   var res=await fetch(apiUrl,{method:'POST',headers:{'Content-Type':'application/json'},signal:AbortSignal.timeout(40000),body:JSON.stringify(body)});
-  if(!res.ok){var e=await res.json(); throw new Error('Gemini error: '+((e.error&&e.error.message)||res.status));}
+  if(!res.ok){
+    var e=await res.json();
+    var status=res.status;
+    var msg=e.error&&e.error.message||'';
+    if(status===400||msg.includes('API_KEY')||msg.includes('invalid')) throw new Error('APIキーが無効です。設定からAPIキーを確認してください。');
+    if(status===429) throw new Error('APIの利用制限に達しました。しばらく待ってから再取得してください。（無料枠の上限超過）');
+    if(status===403) throw new Error('APIキーの権限がありません。Google AI StudioでAPIキーを確認してください。');
+    throw new Error('Gemini APIエラー（'+status+'）: '+msg);
+  }
   var j=await res.json();
   var parts=j.candidates&&j.candidates[0]&&j.candidates[0].content&&j.candidates[0].content.parts;
   var raw=(parts||[]).map(function(p){return p.text||'';}).join('');
@@ -747,7 +787,7 @@ async function fetchHotNews(){
   var sourceUrls=chunks.map(function(ch){return ch.web&&ch.web.uri||'';}).filter(Boolean);
   var supports=(meta&&meta.groundingSupports)||[];
   var s=raw.indexOf('['),e=raw.lastIndexOf(']');
-  if(s===-1||e===-1) throw new Error('JSONパース失敗');
+  if(s===-1||e===-1) throw new Error('AI応答のパースに失敗しました。再取得してください。');
   var arts=parseJson(raw.slice(s,e+1));
   var seenT=[];
   arts=arts.filter(function(a){
