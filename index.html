@@ -330,7 +330,7 @@ const PROXIES = [
 
 const DEFAULT_CATS = {
   hot:      {label:'ホットニュース', icon:'🔥', tagClass:'tag-hot', useSearch:true, searchQuery:'今日 日本 話題 トレンドニュース', isHot:true, fixed:true},
-  news:     {label:'国内ニュース',   icon:'📰', tagClass:'tag-geo', feeds:['https://www.nhk.or.jp/rss/news/cat0.xml'], fixed:true},
+  news:     {label:'国内ニュース',   icon:'📰', tagClass:'tag-geo', feeds:['https://www.asahi.com/rss/asahi/newsheadlines.rdf','https://mainichi.jp/rss/etc/mainichi-flash.rss'], fixed:true},
   anime:    {label:'アニメ',         icon:'📺', tagClass:'tag-anime', feeds:['https://animeanime.jp/rss/index.rdf'], fixed:true},
   ai:       {label:'AI最新情報',     icon:'🤖', tagClass:'tag-ai',  feeds:['https://rss.itmedia.co.jp/rss/2.0/aiplus.xml'], fixed:true},
   finance:  {label:'経済・金融',     icon:'💹', tagClass:'tag-fin', feeds:['https://business.nikkei.com/rss/sns/nb.rdf'], fixed:true},
@@ -994,7 +994,7 @@ function openDetail(catId, idx){
 async function generateDetail(catId,idx,article){
   var cat=CATS[catId]||{};
   try{
-    var prompt='以下の記事について詳しく解説してください。JSONのみで返してください。\nタイトル: '+article.title+'\n概要: '+article.summary+'\n\n{"content":"記事の詳細な内容（200字以上）","audience":"誰向けの情報か","analysis":"背景・意義・注目点（150字以上）"}';
+    var prompt='以下の記事の概要をもとに解説してください。JSONのみで返してください。推測や憶測は禁止。概要に書かれている内容だけを使うこと。\nタイトル: '+article.title+'\n概要: '+article.summary+'\n\n{"content":"概要をわかりやすく言い換えた内容（概要に書かれていることのみ）","audience":"誰向けの情報か（概要から判断）","analysis":"概要から読み取れる背景や意義（推測禁止）"}';
     var raw=await gemini(prompt,3000);
     var s=raw.indexOf('{'),e=raw.lastIndexOf('}');
     if(s===-1||e===-1) throw new Error('parse fail');
