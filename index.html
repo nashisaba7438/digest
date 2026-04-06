@@ -991,10 +991,46 @@ function openDetail(catId, idx){
   document.getElementById('detail-page').scrollTop=0;
 }
 
+async function fetchArticleBody(url){
+  // プロキシで記事本文を取得してテキストを抽出
+  for(var i=0;i<PROXIES.length;i++){
+    try{
+      var res=await fetch(PROXIES[i](url),{signal:AbortSignal.timeout(8000)});
+      if(!res.ok) continue;
+      var html=await res.text();
+      if(!html||html.length<500) continue;
+      // HTMLタグを除去してテキスト抽出（最大3000字）
+      var text=html
+        .replace(/<script[\s\S]*?<\/script>/gi,'')
+        .replace(/<style[\s\S]*?<\/style>/gi,'')
+        .replace(/<[^>]+>/g,' ')
+        .replace(/\s+/g,' ')
+        .trim()
+        .slice(0,3000);
+      if(text.length>200) return text;
+    }catch(e){ continue; }
+  }
+  return null;
+}
+
 async function generateDetail(catId,idx,article){
   var cat=CATS[catId]||{};
   try{
-    var prompt='以下の記事の概要をもとに解説してください。JSONのみで返してください。推測や憶測は禁止。概要に書かれている内容だけを使うこと。\nタイトル: '+article.title+'\n概要: '+article.summary+'\n\n{"content":"概要をわかりやすく言い換えた内容（概要に書かれていることのみ）","audience":"誰向けの情報か（概要から判断）","analysis":"概要から読み取れる背景や意義（推測禁止）"}';
+    // まず記事本文の取得を試みる
+    var bodyText=null;
+    if(article.link){
+      bodyText=await fetchArticleBody(article.link);
+    }
+
+    var prompt,raw,detail;
+    if(bodyText){
+      // 本文が取得できた場合 → 本文をもとに解説
+      prompt='以下の記事本文をもとに解説してください。JSONのみで返してください。本文に書かれていない内容は書かないこと。\nタイトル: '+article.title+'\n本文: '+bodyText+'\n\n{"content":"記事の内容を200字以上でわかりやすく要約","audience":"誰向けの情報か","analysis":"本文から読み取れる背景・意義・注目点"}';
+    } else {
+      // 本文が取得できなかった場合 → 概要のみで解説（憶測禁止を明示）
+      prompt='以下の記事の概要をもとに解説してください。JSONのみで返してください。概要に書かれていない内容は一切書かないこと。推測・憶測・補足は禁止。\nタイトル: '+article.title+'\n概要: '+article.summary+'\n\n{"content":"概要をそのままわかりやすく言い換えた内容のみ","audience":"概要から判断できる対象者","analysis":"概要から読み取れる範囲のみ。不明な場合は空文字","notice":"記事本文の取得に失敗しました。詳しくは元記事をご確認ください。"}';
+    }
+
     var raw=await gemini(prompt,3000);
     var s=raw.indexOf('{'),e=raw.lastIndexOf('}');
     if(s===-1||e===-1) throw new Error('parse fail');
@@ -1015,7 +1051,8 @@ function renderDetailBody(detail){
   bodyEl.innerHTML=
     '<div class="detail-section"><div class="detail-section-label">内容</div><div class="detail-section-text">'+escHtml(detail.content||'')+'</div></div>'+
     (detail.audience?'<div class="detail-section"><div class="detail-section-label">対象</div><div class="detail-section-text">'+escHtml(detail.audience)+'</div></div>':'')+
-    (detail.analysis?'<div class="detail-section"><div class="detail-section-label">解説</div><div class="detail-section-text">'+escHtml(detail.analysis)+'</div></div>':'');
+    (detail.analysis?'<div class="detail-section"><div class="detail-section-label">解説</div><div class="detail-section-text">'+escHtml(detail.analysis)+'</div></div>':'')+
+    (detail.notice?'<div class="detail-section" style="background:rgba(255,200,0,0.08);border:1px solid rgba(255,200,0,0.2);border-radius:6px;padding:10px;"><div class="detail-section-text" style="color:#ffcc00;font-size:0.78rem;">⚠️ '+escHtml(detail.notice)+'</div></div>':'');
 }
 
 function updateDetailBtns(a){
