@@ -503,7 +503,7 @@ async function fetchRSS(url){
     if(!img){var encM2=b.match(/<enclosure[^>]+type="image[^"]*"[^>]+url="([^"]+)"/i); if(encM2) img=encM2[1];}
     if(!img){var iTag=desc.match(/<img[^>]+src="(https?:\/\/[^"]+\.(?:jpg|jpeg|png|webp|gif)[^"]*)"/i); if(iTag) img=iTag[1];}
     // descriptionからHTMLタグを除去してテキストのみ抽出
-    var descText = desc.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'").replace(/\s+/g,' ').trim().slice(0,300);
+    var descText = desc.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'").replace(/\s+/g,' ').trim().slice(0,150);
     if(title.trim()) items.push({
       title:title.trim().replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'"),
       link:finalLink, image:img, desc:descText
@@ -1057,7 +1057,7 @@ function renderDetailBody(detail){
   bodyEl.innerHTML=
     '<div class="detail-section"><div class="detail-section-label">内容</div><div class="detail-section-text">'+escHtml(detail.content||'')+'</div></div>'+
     (detail.audience?'<div class="detail-section"><div class="detail-section-label">対象</div><div class="detail-section-text">'+escHtml(detail.audience)+'</div></div>':'')+
-    (detail.analysis?'<div class="detail-section"><div class="detail-section-label">解説</div><div class="detail-section-text">'+escHtml(detail.analysis)+'</div></div>':'')+
+    (detail.analysis?'<div class="detail-section"><div class="detail-section-label">解説</div><div class="detail-section-text">'+escHtml(typeof detail.analysis==='object'?Object.values(detail.analysis).join(' '):detail.analysis)+'</div></div>':'')+
     (detail.notice?'<div class="detail-section" style="background:rgba(255,200,0,0.08);border:1px solid rgba(255,200,0,0.2);border-radius:6px;padding:10px;"><div class="detail-section-text" style="color:#ffcc00;font-size:0.78rem;">⚠️ '+escHtml(detail.notice)+'</div></div>':'');
 }
 
