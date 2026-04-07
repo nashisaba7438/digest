@@ -502,9 +502,11 @@ async function fetchRSS(url){
     if(!img){var encM=b.match(/<enclosure[^>]+url="([^"]+\.(?:jpg|jpeg|png|webp|gif))"[^>]*type="image/i); if(encM) img=encM[1];}
     if(!img){var encM2=b.match(/<enclosure[^>]+type="image[^"]*"[^>]+url="([^"]+)"/i); if(encM2) img=encM2[1];}
     if(!img){var iTag=desc.match(/<img[^>]+src="(https?:\/\/[^"]+\.(?:jpg|jpeg|png|webp|gif)[^"]*)"/i); if(iTag) img=iTag[1];}
+    // descriptionからHTMLタグを除去してテキストのみ抽出
+    var descText = desc.replace(/<[^>]+>/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'").replace(/\s+/g,' ').trim().slice(0,300);
     if(title.trim()) items.push({
       title:title.trim().replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&#39;/g,"'"),
-      link:finalLink, image:img
+      link:finalLink, image:img, desc:descText
     });
   }
   if(!items.length){
@@ -711,9 +713,13 @@ async function fetchOne(catId, forceRefresh){
       });
 
       // AI要約（8件）
-      var headlines=items.slice(0,20).map(function(it,i){return '['+i+'] '+it.title;}).join('\n');
+      var headlines=items.slice(0,20).map(function(it,i){
+        return '['+i+'] '+it.title+(it.desc?' / '+it.desc.slice(0,80):'');
+      }).join('\n');
       var prefStr=getPrefsPrompt();
-      var prompt='「'+cat.label+'」ヘッドライン:\n'+headlines+'\n\n重要8件をJSONのみで返せ。[から]で終わること。titleは必ずヘッドラインのテキストをそのままコピーすること。'+prefStr+'\n[{"title":"ヘッドラインのタイトルをそのままコピー","summary":"100〜200字で内容を具体的に","importance":3}]';
+      var prompt='「'+cat.label+'」ヘッドライン一覧（タイトル / RSS概要）:\n'+headlines+'\n\n重要8件をJSONのみで返せ。[から]で終わること。'+
+        'titleは必ず[番号]のタイトルをそのままコピー。summaryはRSS概要をもとに100〜200字で要約（概要がない場合のみタイトルから推測可）。'+prefStr+'\n'+
+        '[{"title":"タイトルをそのままコピー","summary":"RSS概要をもとにした要約","importance":3}]';
       var raw=await gemini(prompt,5000);
       var sv=raw.indexOf('['),ev=raw.lastIndexOf(']');
       if(sv===-1||ev===-1) throw new Error('AI応答のパースに失敗しました。再取得してください。（応答: '+raw.slice(0,60)+'）');
