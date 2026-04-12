@@ -385,16 +385,11 @@ function saveCats(){
   var toSave = {};
   Object.keys(CATS).forEach(function(id){
     if(!DEFAULT_CATS[id]){
-      // 完全にカスタムのカテゴリはそのまま保存
+      // カスタムカテゴリはそのまま保存
       toSave[id] = CATS[id];
     } else {
-      // デフォルトカテゴリはfeedsの変更だけ保存
-      var def = DEFAULT_CATS[id];
-      var cur = CATS[id];
-      var feedsChanged = JSON.stringify(cur.feeds||[]) !== JSON.stringify(def.feeds||[]);
-      if(feedsChanged){
-        toSave[id] = {feeds: cur.feeds||[]};
-      }
+      // デフォルトカテゴリは常にfeedsを保存（変更判定しない）
+      toSave[id] = {feeds: CATS[id].feeds||[]};
     }
   });
   try{ localStorage.setItem('digest_cats', JSON.stringify(toSave)); }catch(e){}
