@@ -323,8 +323,8 @@ const SCHEDULE = ['06:00','12:00','16:00'];
 const ONE_MONTH = 30*24*60*60*1000;
 const CACHE_TTL = 3*60*60*1000; // 3時間
 const PROXIES = [
+  u => 'https://corsproxy.io/?url=' + encodeURIComponent(u),
   u => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
-  u => 'https://api.codetabs.com/v1/proxy?quest=' + encodeURIComponent(u),
   u => 'https://api.allorigins.win/get?url=' + encodeURIComponent(u),
 ];
 
